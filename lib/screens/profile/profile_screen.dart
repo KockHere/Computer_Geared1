@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shop_app/models/Cart.dart';
 import 'package:shop_app/models/User.dart';
 import 'package:shop_app/screens/change_password/change_password_screen.dart';
+import 'package:shop_app/screens/init_screen.dart';
 import 'package:shop_app/screens/my_account/my_account_screen.dart';
 import 'package:shop_app/screens/my_order/my_order_screen.dart';
 import 'package:shop_app/screens/notification/notification_screen.dart';
@@ -40,7 +42,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
                 user = User(userId: "");
-                Navigator.pushNamed(context, SignInScreen.routeName);
+                userCart = Cart(cartId: "");
+                Navigator.pushNamed(context, InitScreen.routeName);
               },
               child: const Text('Có'),
             ),
@@ -131,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ProfileMenu(
               text: user.userId == "" ? "Đăng nhập" : "Đăng xuất",
               icon: "assets/icons/Log out.svg",
-              press: () {
+              press: () async {
                 if (user.userId != "") {
                   _showDialogLogout();
                 } else {
