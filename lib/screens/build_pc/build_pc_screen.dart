@@ -92,10 +92,10 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
           .toList();
     } else {
       listIndexCategory = listCategory.toList()
-        ..removeWhere((element) => element.name!
-            .toLowerCase()
-            .contains(RegExp("main|psu|ram|cpu|vga|hard drive|case|cooling|monitor|keyboard|mouse|earphone")));
-      listIndexCategory = listIndexCategory.skip((indexCategory - 3)*4).take(4).toList();
+        ..removeWhere((element) => element.name!.toLowerCase().contains(RegExp(
+            "main|psu|ram|cpu|vga|hard drive|case|cooling|monitor|keyboard|mouse|earphone")));
+      listIndexCategory =
+          listIndexCategory.skip((indexCategory - 3) * 4).take(4).toList();
     }
     if (mounted) {
       setState(() {});

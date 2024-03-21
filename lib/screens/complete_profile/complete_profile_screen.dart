@@ -64,7 +64,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ),
                       const SizedBox(height: 30),
                       Text(
-                        'Tiếp tục bằng cách đông ý với \nđiều khản của chúng tôi',
+                        'Tiếp tục bằng cách đông ý với \nđiều khoản của chúng tôi',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodySmall,
                       )

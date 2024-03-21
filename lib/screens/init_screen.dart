@@ -20,32 +20,19 @@ class InitScreen extends StatefulWidget {
 
 class _InitScreenState extends State<InitScreen> {
   int currentSelectedIndex = 0;
-
   void updateCurrentIndex(int index) async {
+    currentSelectedIndex = index;
     if (currentSelectedIndex == 3) {
       String facebookIdHere = "230886160111786";
-      String url() {
-        if (Platform.isAndroid) {
-          String uri = 'fb-messenger://user/$facebookIdHere';
-          return uri;
-        } else if (Platform.isIOS) {
-          // iOS
-          String uri = 'https://m.me/$facebookIdHere';
-          return uri;
-        } else {
-          return 'error';
-        }
+      String uri = "";
+      if (Platform.isAndroid) {
+        uri = 'fb-messenger://user/$facebookIdHere';
+      } else if (Platform.isIOS) {
+        uri = 'https://m.me/$facebookIdHere';
       }
-
-      try {
-        await launchUrl(Uri.parse(url()));
-      } on Exception catch (e) {
-        print(e);
-      }
+      await launchUrl(Uri.parse(uri));
     } else {
-      setState(() {
-        currentSelectedIndex = index;
-      });
+      setState(() {});
     }
   }
 

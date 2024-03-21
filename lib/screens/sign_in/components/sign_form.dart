@@ -10,7 +10,8 @@ import '../../forgot_password/forgot_password_screen.dart';
 import 'package:shop_app/screens/init_screen.dart';
 
 class SignForm extends StatefulWidget {
-  const SignForm({Key? key, required this.isObscure, required this.onTapIcon}) : super(key: key);
+  const SignForm({Key? key, required this.isObscure, required this.onTapIcon})
+      : super(key: key);
   final bool isObscure;
   final Function() onTapIcon;
 
