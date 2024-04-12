@@ -1,1 +1,1 @@
-Capstone Project Computer Geared Mobile
+Capstone Project Computer Geared Mobile App

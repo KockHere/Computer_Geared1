@@ -20,8 +20,8 @@ class CartAPI {
     );
     if (response.statusCode == 200) {
       try {
-        userCart = Cart.fromJson(bodyJson);
         List<dynamic> bodyJson = json.decode(utf8.decode(response.bodyBytes));
+        listUserCart = [];
         for (var element in bodyJson) {
           listCart.add(Cart.fromJson(element));
           listUserCart.add(Cart.fromJson(element));
