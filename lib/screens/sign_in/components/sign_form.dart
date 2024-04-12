@@ -10,10 +10,15 @@ import '../../forgot_password/forgot_password_screen.dart';
 import 'package:shop_app/screens/init_screen.dart';
 
 class SignForm extends StatefulWidget {
-  const SignForm({Key? key, required this.isObscure, required this.onTapIcon})
-      : super(key: key);
+  const SignForm({
+    super.key,
+    required this.isObscure,
+    required this.onTapIcon,
+    required this.onSetState,
+  });
   final bool isObscure;
   final Function() onTapIcon;
+  final Function() onSetState;
 
   @override
   _SignFormState createState() => _SignFormState();
@@ -71,7 +76,7 @@ class _SignFormState extends State<SignForm> {
             },
             decoration: const InputDecoration(
               labelText: "Email",
-              hintText: "Nhập email",
+              hintText: "Enter email",
               // If  you are using latest version of flutter then lable text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -101,8 +106,8 @@ class _SignFormState extends State<SignForm> {
               return null;
             },
             decoration: InputDecoration(
-              labelText: "Mật khẩu",
-              hintText: "Nhập mật khẩu",
+              labelText: "Password",
+              hintText: "Enter Password",
               // If  you are using latest version of flutter then lable text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -129,13 +134,13 @@ class _SignFormState extends State<SignForm> {
                   });
                 },
               ),
-              const Text("Lưu mật khẩu"),
+              const Text("Remember Me"),
               const Spacer(),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(
                     context, ForgotPasswordScreen.routeName),
                 child: const Text(
-                  "Quên mật khẩu",
+                  "Forgot Password",
                   style: TextStyle(decoration: TextDecoration.underline),
                 ),
               )
@@ -144,22 +149,29 @@ class _SignFormState extends State<SignForm> {
           FormError(errors: errors),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
                 // if all are valid then go to success screen
                 KeyboardUtil.hideKeyboard(context);
+                isLoading = true;
+                widget.onSetState();
                 UserAPI.login(email ?? "", password ?? "").then((data) {
                   if (data.userId == "") {
-                    addError(error: "Email hoặc mật khẩu không đúng");
+                    addError(error: "Incorrect Email Or Password!! ");
                   } else {
-                    user = data;
+                    isLoading = false;
+                    widget.onSetState();
                     Navigator.pushNamed(context, InitScreen.routeName);
+                    // CartAPI.addCartItem(userCart.productList ?? [])
+                    //     .then((value) {
+                    //   Navigator.pushNamed(context, InitScreen.routeName);
+                    // });
                   }
                 });
               }
             },
-            child: const Text("Đăng nhập"),
+            child: const Text("LOGIN"),
           ),
         ],
       ),

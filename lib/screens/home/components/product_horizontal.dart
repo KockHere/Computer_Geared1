@@ -43,7 +43,7 @@ class ProductHorizontal extends StatelessWidget {
                   child: const Row(
                     children: [
                       Text(
-                        "Xem thêm",
+                        "More",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

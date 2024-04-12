@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/Payment.dart';
 
 class PaymentCard extends StatelessWidget {
   const PaymentCard({
-    Key? key,
+    super.key,
     required this.payment,
-  }) : super(key: key);
+  });
 
   final Payment payment;
 
@@ -15,11 +16,10 @@ class PaymentCard extends StatelessWidget {
       color: Colors.transparent,
       child: Row(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 28,
             width: 28,
-            child: Image.network(
-                payment.paymentImage ?? "https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-ZaloPay-Square.png"),
+            child: Icon(Icons.monetization_on_outlined, color: kPrimaryColor),
           ),
           const SizedBox(width: 10),
           Text(

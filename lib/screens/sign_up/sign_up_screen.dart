@@ -21,7 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Đăng ký"),
+        title: const Text("Sign Up"),
       ),
       body: SafeArea(
         child: SizedBox(
@@ -32,12 +32,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 16),
-                  const Text("Đăng ký tài khoản", style: headingStyle),
-                  const Text(
-                    "Đăng ký bằng email và mật khẩu",
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
+                  const Text("Sign Up", style: headingStyle),
+                  // const Text(
+                  //   "Sign Up by Email and Password",
+                  //   textAlign: TextAlign.center,
+                  // ),
+                  const SizedBox(height: 20),
                   SignUpForm(
                     isObscurePassword: isObscurePassword,
                     onTapIconPassword: () {
@@ -54,7 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    "hoặc",
+                    "Or",
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -78,16 +78,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: [
                         SvgPicture.asset("assets/icons/google-icon.svg"),
                         const SizedBox(width: 8),
-                        const Text("Đăng ký bằng Google"),
+                        const Text("Sign In With Google"),
                       ],
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    'Tiếp tục bằng cách đông ý với \nđiều khản của chúng tôi',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )
+                  // Text(
+                  //   'Continue by agreeing \nwith our Term',
+                  //   textAlign: TextAlign.center,
+                  //   style: Theme.of(context).textTheme.bodySmall,
+                  // )
                 ],
               ),
             ),

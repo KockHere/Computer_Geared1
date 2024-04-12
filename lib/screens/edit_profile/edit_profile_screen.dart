@@ -18,7 +18,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
-          "Sửa thông tin cá nhân",
+          "Edit User's Profile",
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
@@ -44,8 +44,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 onChanged: (value) {},
                 initialValue: user.firstName ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Họ",
-                  hintText: "Nhập họ của bạn",
+                  labelText: "First Name",
+                  hintText: "Enter Your First Name",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
@@ -54,8 +54,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 onChanged: (value) {},
                 initialValue: user.lastName ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Tên",
-                  hintText: "Nhập tên của bạn",
+                  labelText: "Last Name",
+                  hintText: "Enter Your Last Name",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
@@ -64,8 +64,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 onChanged: (value) {},
                 initialValue: user.phoneNumber ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Số điện thoại",
-                  hintText: "Nhập số điện thoại",
+                  labelText: "Phone Number",
+                  hintText: "Enter Phone Number",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
@@ -92,7 +92,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               color: kPrimaryColor,
             ),
             child: const Text(
-              "Cập nhật",
+              "Update",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

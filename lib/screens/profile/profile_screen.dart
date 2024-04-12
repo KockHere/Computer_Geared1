@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/User.dart';
-import 'package:shop_app/models/Cart.dart';
 import 'package:shop_app/screens/change_password/change_password_screen.dart';
 import 'package:shop_app/screens/init_screen.dart';
 import 'package:shop_app/screens/my_account/my_account_screen.dart';
 import 'package:shop_app/screens/my_order/my_order_screen.dart';
 import 'package:shop_app/screens/notification/notification_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
+import 'package:shop_app/screens/vnpay/vnpay_screen.dart';
 import 'package:shop_app/variables.dart';
 
 import 'components/profile_menu.dart';
@@ -23,29 +23,48 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   Future<void> _showDialogLogout() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: const Text('Đăng xuất?'),
-          content: const Text('Bạn chắc chắn muốn đăng xuất?'),
+        return AlertDialog(
+          title: const Text('Signing Out'),
+          content: const Text('Are you really want to Sign Out ?'),
           actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Không'),
+              child: const Text('No',
+                  style: TextStyle(
+                      color: kPrimaryColor, fontWeight: FontWeight.w600)),
             ),
-            CupertinoDialogAction(
-              onPressed: () {
+            const SizedBox(width: 20),
+            GestureDetector(
+              onTap: () {
                 Navigator.of(context).pop();
                 user = User(userId: "");
-                userCart = Cart(cartId: "");
+                listUserCart = [];
+                prefs.then((dataPrefs) {
+                  dataPrefs.remove("USER");
+                  dataPrefs.remove("USER_CART");
+                });
                 Navigator.pushNamed(context, InitScreen.routeName);
               },
-              child: const Text('Có'),
+              child: const Text('Yes',
+                  style: TextStyle(
+                      color: kPrimaryColor, fontWeight: FontWeight.w600)),
             ),
           ],
         );
@@ -61,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Colors.white,
         leading: Container(),
         title: Text(
-          "Cá nhân",
+          "Personal",
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
@@ -72,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const ProfilePic(),
             const SizedBox(height: 20),
             ProfileMenu(
-              text: "Tài khoản",
+              text: "Profile",
               icon: "assets/icons/User Icon.svg",
               press: () {
                 if (user.userId == "") {
@@ -87,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             ProfileMenu(
-              text: "Thông báo",
+              text: "Notification",
               icon: "assets/icons/Bell.svg",
               press: () {
                 if (user.userId == "") {
@@ -102,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             ProfileMenu(
-              text: "Đơn hàng",
+              text: "My Order",
               icon: "assets/icons/Cart Icon.svg",
               press: () {
                 if (user.userId == "") {
@@ -117,22 +136,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             ProfileMenu(
-              text: "Đổi mật khẩu",
+              text: "Change Password",
               icon: "assets/icons/Lock.svg",
               press: () {
                 if (user.userId == "") {
                   Navigator.pushNamed(context, SignInScreen.routeName);
                 } else {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => const ChangePasswordScreen()),
+                  // );
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ChangePasswordScreen()),
+                        builder: (context) => VnPayScreen(url: "")),
                   );
                 }
               },
             ),
             ProfileMenu(
-              text: user.userId == "" ? "Đăng nhập" : "Đăng xuất",
+              text: user.userId == "" ? "Sign In" : "Sign Out",
               icon: "assets/icons/Log out.svg",
               press: () {
                 if (user.userId != "") {

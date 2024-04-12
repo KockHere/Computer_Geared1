@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-
-import '../../../constants.dart';
-import '../../../models/CartItem.dart';
+import 'package:shop_app/constants.dart';
+import 'package:shop_app/models/Orders.dart';
 
 class OrderCard extends StatelessWidget {
   const OrderCard({
-    Key? key,
-    required this.cartItem,
-    required this.orderStatus,
+    super.key,
+    required this.orders,
     required this.onTap,
-  }) : super(key: key);
+  });
 
-  final CartItem cartItem;
-  final String orderStatus;
+  final Orders orders;
   final Function() onTap;
 
   @override
@@ -24,70 +21,94 @@ class OrderCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           color: Colors.white,
         ),
-        padding: const EdgeInsets.only(right: 16),
+        padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(bottom: 10),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SizedBox(
-            //   width: 88,
-            //   child: AspectRatio(
-            //     aspectRatio: 0.88,
-            //     child: Image.network(cartItem.product!.imageLinks!.isNotEmpty
-            //         ? cartItem.product!.imageLinks![0]
-            //         : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
-            //   ),
-            // ),
-            // const SizedBox(width: 10),
-            // Expanded(
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       Text(
-            //         cartItem.product!.name ?? "",
-            //         style: const TextStyle(color: Colors.black, fontSize: 16),
-            //         maxLines: 3,
-            //       ),
-            //       const Text(
-            //         "và 1 sản phẩm khác",
-            //         style: TextStyle(color: Colors.grey, fontSize: 12),
-            //       ),
-            //       const SizedBox(height: 8),
-            //       Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           Text(
-            //             "${cartItem.product!.unitPrice}đ",
-            //             style: const TextStyle(
-            //                 fontWeight: FontWeight.w600, color: kPrimaryColor),
-            //           ),
-            //           Container(
-            //             padding: const EdgeInsets.symmetric(
-            //                 vertical: 8, horizontal: 16),
-            //             decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(20),
-            //               color: orderStatus == "Hoàn thành"
-            //                   ? Colors.green.withOpacity(0.3)
-            //                   : orderStatus == "Hủy"
-            //                       ? Colors.red.withOpacity(0.3)
-            //                       : Colors.blue.withOpacity(0.3),
-            //             ),
-            //             child: Text(
-            //               orderStatus,
-            //               style: TextStyle(
-            //                 fontWeight: FontWeight.w600,
-            //                 color: orderStatus == "Hoàn thành"
-            //                     ? Colors.green
-            //                     : orderStatus == "Hủy"
-            //                         ? Colors.red
-            //                         : Colors.blue,
-            //               ),
-            //             ),
-            //           ),
-            //         ],
-            //       )
-            //     ],
-            //   ),
-            // ),
+            Text(
+              orders.recipientName ?? "",
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "${orders.streetAddress ?? ""}, ${orders.city}",
+              style: const TextStyle(color: Colors.black, fontSize: 16),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Text(
+                  "Product Quantity: ",
+                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                ),
+                Text(
+                  "${orders.totalItems}",
+                  style: const TextStyle(
+                    color: kPrimaryColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Text(
+                  "Payment Method: ",
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                Text(
+                  "${orders.paymentMethod}",
+                  style: const TextStyle(
+                    color: kPrimaryColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "${orders.total ?? 0}đ",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, color: kPrimaryColor),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: orders.statusDetail == "Delivered"
+                        ? Colors.green.withOpacity(0.3)
+                        : orders.statusDetail == "Canceled"
+                            ? Colors.red.withOpacity(0.3)
+                            : Colors.blue.withOpacity(0.3),
+                  ),
+                  child: Text(
+                    orders.statusDetail ?? "",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: orders.statusDetail == "Delivered"
+                          ? Colors.green
+                          : orders.statusDetail == "Canceled"
+                              ? Colors.red
+                              : Colors.blue,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

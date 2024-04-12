@@ -34,13 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Product> listAllProduct = [];
   List<Product> listProduct = [];
-  List<Product> listProductCPU = [];
+  List<Product> listProductProcessor = [];
+  List<Product> listProductMotherboard = [];
+  List<Product> listProductCase = [];
+  List<Product> listProductGPU = [];
+  List<Product> listProductRam = [];
+  List<Product> listProductStorage = [];
   List<Product> listProductMonitor = [];
-  List<Product> listProductKeyboard = [];
-  List<Product> listProductVGA = [];
 
   List<Category> listCategory = [];
-  String categoryActive = "Tất cả";
+  String categoryActive = "All";
 
   @override
   void initState() {
@@ -49,39 +52,54 @@ class _HomeScreenState extends State<HomeScreen> {
       isLoading = true;
     });
     CategoryAPI.getListCategory().then((categories) {
-      listCategory.add(Category(name: "Tất cả"));
+      listCategory.add(Category(name: "All"));
       listCategory.addAll(categories);
       ProductAPI.getListProduct().then((products) {
         listAllProduct = products;
         listProduct = listAllProduct;
-        listProductCPU = listAllProduct
+        listProductProcessor = listAllProduct
             .where((element) =>
-                element.categoryName!.toLowerCase().contains("cpu"))
-            .take(6)
+                element.categoryName!.toLowerCase().contains("processor"))
+            .take(10)
+            .toList();
+        listProductMotherboard = listAllProduct
+            .where((element) =>
+                element.categoryName!.toLowerCase().contains("motherboard"))
+            .take(10)
+            .toList();
+        listProductCase = listAllProduct
+            .where((element) =>
+                element.categoryName!.toLowerCase().contains("case"))
+            .take(10)
+            .toList();
+        listProductGPU = listAllProduct
+            .where((element) =>
+                element.categoryName!.toLowerCase().contains("gpu"))
+            .take(10)
+            .toList();
+        listProductRam = listAllProduct
+            .where((element) =>
+                element.categoryName!.toLowerCase().contains("ram"))
+            .take(10)
+            .toList();
+        listProductStorage = listAllProduct
+            .where((element) =>
+                element.categoryName!.toLowerCase().contains("storage"))
+            .take(10)
             .toList();
         listProductMonitor = listAllProduct
             .where((element) =>
                 element.categoryName!.toLowerCase().contains("monitor"))
-            .take(6)
-            .toList();
-        listProductKeyboard = listAllProduct
-            .where((element) =>
-                element.categoryName!.toLowerCase().contains("keyboard"))
-            .take(6)
-            .toList();
-        listProductVGA = listAllProduct
-            .where((element) =>
-                element.categoryName!.toLowerCase().contains("vga"))
-            .take(6)
+            .take(10)
             .toList();
         CartAPI.getUserCart().then((cart) {
-          userCart = cart;
           if (mounted) {
             setState(() {
               isLoading = false;
             });
           }
         });
+        prefs.then((dataPrefs) {});
       });
     });
   }
@@ -97,11 +115,21 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   HomeHeader(
-                    numberOfProduct: userCart.productTotal == null
-                        ? 0
-                        : int.parse(
-                            userCart.productTotal!,
-                          ),
+                    // numberOfProduct: userCart.productTotal == null
+                    //     ? 0
+                    //     : int.parse(
+                    //         userCart.productTotal!,
+                    //       ),
+                    numberOfProduct: listUserCart
+                        .where((element) => element.personalBuildPcId == "")
+                        .toList()
+                        .fold(
+                            0,
+                            (sum, item) =>
+                                sum +
+                                (item.productList!.isEmpty
+                                    ? 0
+                                    : item.productList!.first.quantity!)),
                     onSetState: () {
                       setState(() {});
                     },
@@ -111,9 +139,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     categories: listCategory.skip(1).toList(),
                     listAllProduct: listAllProduct,
                   ),
-                  if (listProductCPU.isNotEmpty) ...[
+                  if (listProductProcessor.isNotEmpty) ...[
                     ProductHorizontal(
-                      backgroundColor: const Color(0xfff6f6f6), // Colors.red,
+                      backgroundColor:
+                          const Color(0xfff6f6f6), // Colors.orangeAccent,
                       categoryName: "CPU",
                       onTap: () {
                         Navigator.push(
@@ -124,13 +153,148 @@ class _HomeScreenState extends State<HomeScreen> {
                               products: listAllProduct
                                   .where((element) => element.categoryName!
                                       .toLowerCase()
-                                      .contains("cpu"))
+                                      .contains("processor"))
                                   .toList(),
                             ),
                           ),
                         );
                       },
-                      products: listProductCPU,
+                      products: listProductProcessor,
+                      onTapAddToCart: () {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  if (listProductMotherboard.isNotEmpty) ...[
+                    ProductHorizontal(
+                      backgroundColor:
+                          const Color(0xfff6f6f6), // Colors.orangeAccent,
+                      categoryName: "Motherboard",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductsScreen(
+                              title: "Motherboard",
+                              products: listAllProduct
+                                  .where((element) => element.categoryName!
+                                      .toLowerCase()
+                                      .contains("motherboard"))
+                                  .toList(),
+                            ),
+                          ),
+                        );
+                      },
+                      products: listProductMotherboard,
+                      onTapAddToCart: () {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  if (listProductCase.isNotEmpty) ...[
+                    ProductHorizontal(
+                      backgroundColor:
+                          const Color(0xfff6f6f6), // Colors.orangeAccent,
+                      categoryName: "Case",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductsScreen(
+                              title: "Case",
+                              products: listAllProduct
+                                  .where((element) => element.categoryName!
+                                      .toLowerCase()
+                                      .contains("case"))
+                                  .toList(),
+                            ),
+                          ),
+                        );
+                      },
+                      products: listProductCase,
+                      onTapAddToCart: () {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  if (listProductGPU.isNotEmpty) ...[
+                    ProductHorizontal(
+                      backgroundColor:
+                          const Color(0xfff6f6f6), // Colors.lightBlue,
+                      categoryName: "GPU",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductsScreen(
+                              title: "GPU",
+                              products: listAllProduct
+                                  .where((element) => element.categoryName!
+                                      .toLowerCase()
+                                      .contains("gpu"))
+                                  .toList(),
+                            ),
+                          ),
+                        );
+                      },
+                      products: listProductGPU,
+                      onTapAddToCart: () {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  if (listProductRam.isNotEmpty) ...[
+                    ProductHorizontal(
+                      backgroundColor:
+                          const Color(0xfff6f6f6), // Colors.lightBlue,
+                      categoryName: "Ram",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductsScreen(
+                              title: "Ram",
+                              products: listAllProduct
+                                  .where((element) => element.categoryName!
+                                      .toLowerCase()
+                                      .contains("ram"))
+                                  .toList(),
+                            ),
+                          ),
+                        );
+                      },
+                      products: listProductRam,
+                      onTapAddToCart: () {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  if (listProductStorage.isNotEmpty) ...[
+                    ProductHorizontal(
+                      backgroundColor:
+                          const Color(0xfff6f6f6), // Colors.lightBlue,
+                      categoryName: "Storage",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductsScreen(
+                              title: "Storage",
+                              products: listAllProduct
+                                  .where((element) => element.categoryName!
+                                      .toLowerCase()
+                                      .contains("storage"))
+                                  .toList(),
+                            ),
+                          ),
+                        );
+                      },
+                      products: listProductStorage,
                       onTapAddToCart: () {
                         setState(() {});
                       },
@@ -164,60 +328,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 8),
                   ],
-                  if (listProductKeyboard.isNotEmpty) ...[
-                    ProductHorizontal(
-                      backgroundColor:
-                          const Color(0xfff6f6f6), // Colors.orangeAccent,
-                      categoryName: "Keyboard",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductsScreen(
-                              title: "Keyboard",
-                              products: listAllProduct
-                                  .where((element) => element.categoryName!
-                                      .toLowerCase()
-                                      .contains("keyboard"))
-                                  .toList(),
-                            ),
-                          ),
-                        );
-                      },
-                      products: listProductKeyboard,
-                      onTapAddToCart: () {
-                        setState(() {});
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                  if (listProductVGA.isNotEmpty) ...[
-                    ProductHorizontal(
-                      backgroundColor:
-                          const Color(0xfff6f6f6), // Colors.orange,
-                      categoryName: "VGA",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductsScreen(
-                              title: "VGA",
-                              products: listAllProduct
-                                  .where((element) => element.categoryName!
-                                      .toLowerCase()
-                                      .contains("vga"))
-                                  .toList(),
-                            ),
-                          ),
-                        );
-                      },
-                      products: listProductVGA,
-                      onTapAddToCart: () {
-                        setState(() {});
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                  ],
                   CategoryHorizontal(
                     categoryActive: categoryActive,
                     categories: listCategory,
@@ -227,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         listProduct = listAllProduct
                             .where((element) => element.categoryName!
                                 .toLowerCase()
-                                .contains(categoryActive == "Tất cả"
+                                .contains(categoryActive == "All"
                                     ? ""
                                     : categoryActive.toLowerCase()))
                             .toList();

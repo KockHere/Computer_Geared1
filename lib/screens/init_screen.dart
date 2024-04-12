@@ -1,16 +1,21 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/build_pc/build_pc_screen.dart';
+import 'package:shop_app/models/User.dart';
 import 'package:shop_app/screens/category/category_screen.dart';
 import 'package:shop_app/screens/home/home_screen.dart';
+import 'package:shop_app/screens/list_build_pc/list_build_pc_screen.dart';
+import 'package:shop_app/screens/my_order/my_order_screen.dart';
 import 'package:shop_app/screens/profile/profile_screen.dart';
+import 'package:shop_app/variables.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InitScreen extends StatefulWidget {
-  const InitScreen({super.key});
+  const InitScreen({super.key, this.initIndex});
+  final int? initIndex;
 
   static String routeName = "/";
 
@@ -39,7 +44,8 @@ class _InitScreenState extends State<InitScreen> {
   final pages = [
     const HomeScreen(),
     const CategoryScreen(),
-    const BuildPCScreen(),
+    const ListBuildPcScreen(),
+    // const BuildPCScreen(),
     const Center(
       child: Text("Chat"),
     ),
@@ -48,8 +54,33 @@ class _InitScreenState extends State<InitScreen> {
 
   @override
   void initState() {
+    prefs.then((dataPrefs) {
+      String userPrefs = dataPrefs.getString("USER") ?? "";
+      if (userPrefs.isNotEmpty) {
+        user = User.fromJson(jsonDecode(userPrefs) as Map<String, dynamic>);
+      }
+      // String userCartPrefs = dataPrefs.getString("USER_CART") ?? "";
+      // if (userCartPrefs.isNotEmpty) {
+      //   userCart =
+      //       Cart.fromJson(jsonDecode(userCartPrefs) as Map<String, dynamic>);
+      // }
+      if (widget.initIndex == 4) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MyOrderScreen()),
+        );
+      }
+    });
+    if (widget.initIndex != null) {
+      currentSelectedIndex = widget.initIndex!;
+      if (mounted) {
+        setState(() {});
+      }
+    }
     super.initState();
   }
+
+  void getSharedPre() async {}
 
   @override
   Widget build(BuildContext context) {

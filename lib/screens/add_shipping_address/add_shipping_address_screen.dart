@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/controllers/AddressAPI.dart';
+import 'package:shop_app/controllers/ShippingAddressAPI.dart';
 import 'package:shop_app/models/District.dart';
 import 'package:shop_app/models/Province.dart';
+import 'package:shop_app/models/ShippingAddress.dart';
 import 'package:shop_app/models/Ward.dart';
+import 'package:shop_app/screens/loading/loading_screen.dart';
+import 'package:shop_app/show_dialog.dart';
+import 'package:shop_app/variables.dart';
 
 class AddShippingAddressScreen extends StatefulWidget {
   const AddShippingAddressScreen({super.key});
@@ -22,6 +27,10 @@ class _AddShippingAddressScreenState extends State<AddShippingAddressScreen> {
   District? selectedDistrict;
   Ward? selectedWard;
 
+  TextEditingController recipientName = TextEditingController();
+  TextEditingController recipientPhone = TextEditingController();
+  TextEditingController streetAddress = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -35,172 +44,205 @@ class _AddShippingAddressScreenState extends State<AddShippingAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfff6f6f6),
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        title: Text(
-          "Thêm địa chỉ giao hàng",
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.all(20),
-          margin: const EdgeInsets.symmetric(vertical: 20),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                onChanged: (value) {},
-                decoration: const InputDecoration(
-                  labelText: "Tên người nhận",
-                  hintText: "Nhập tên người nhận",
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                onChanged: (value) {},
-                decoration: const InputDecoration(
-                  labelText: "Số điện thoại",
-                  hintText: "Nhập số điện thoại",
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                ),
-              ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<Province>(
-                menuMaxHeight: 500,
-                value: selectedProvince,
-                items: listProvince
-                    .map<DropdownMenuItem<Province>>((Province province) {
-                  return DropdownMenuItem<Province>(
-                    value: province,
-                    child: Text(province.provinceName ?? ""),
-                  );
-                }).toList(),
-                onChanged: (province) {
-                  selectedProvince = province;
-                  selectedDistrict = null;
-                  selectedWard = null;
-                  listWard = [];
-                  AddressAPI.getListDistrict(province!.provinceId ?? "")
-                      .then((data) {
-                    listDistrict = data;
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  });
-                },
-                decoration: const InputDecoration(
-                  labelText: "Tỉnh/Thành phố",
-                  hintText: "Chọn tỉnh/thành phố",
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                ),
-              ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<District>(
-                menuMaxHeight: 500,
-                value: selectedDistrict,
-                items: listDistrict
-                    .map<DropdownMenuItem<District>>((District district) {
-                  return DropdownMenuItem<District>(
-                    value: district,
-                    child: Text(district.districtName ?? ""),
-                  );
-                }).toList(),
-                onChanged: (district) {
-                  selectedDistrict = district;
-                  selectedWard = null;
-                  AddressAPI.getListWard(district!.districtId ?? "")
-                      .then((data) {
-                    listWard = data;
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  });
-                },
-                decoration: const InputDecoration(
-                  labelText: "Quận/Huyện",
-                  hintText: "Chọn quận/huyện",
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                ),
-              ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<Ward>(
-                menuMaxHeight: 500,
-                value: selectedWard,
-                items: listWard.map<DropdownMenuItem<Ward>>((Ward ward) {
-                  return DropdownMenuItem<Ward>(
-                    value: ward,
-                    child: Text(ward.wardName ?? ""),
-                  );
-                }).toList(),
-                onChanged: (ward) {
-                  selectedWard = ward;
-                  setState(() {});
-                },
-                decoration: const InputDecoration(
-                  labelText: "Phường/Xã",
-                  hintText: "Chọn phường/xã",
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                onChanged: (value) {},
-                decoration: const InputDecoration(
-                  labelText: "Địa chỉ",
-                  hintText: "Nhập địa chỉ",
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                onChanged: (value) {},
-                maxLines: 2,
-                decoration: const InputDecoration(
-                  labelText: "Ghi chú",
-                  hintText: "Nhập ghi chú",
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                ),
-              ),
-            ],
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: const Color(0xfff6f6f6),
+          appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            title: Text(
+              "Add Shipping Address",
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
           ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        height: 90,
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xfff6f6f6)),
-          color: Colors.white,
-        ),
-        child: GestureDetector(
-          onTap: () {},
-          child: Container(
-            alignment: Alignment.center,
+          body: SingleChildScrollView(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(20),
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextFormField(
+                    controller: recipientName,
+                    onChanged: (value) {},
+                    decoration: const InputDecoration(
+                      labelText: "Name",
+                      hintText: "Enter",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: recipientPhone,
+                    onChanged: (value) {},
+                    decoration: const InputDecoration(
+                      labelText: "Phone Number",
+                      hintText: "Enter",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                    keyboardType: TextInputType.phone,
+                  ),
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<Province>(
+                    menuMaxHeight: 500,
+                    value: selectedProvince,
+                    items: listProvince
+                        .map<DropdownMenuItem<Province>>((Province province) {
+                      return DropdownMenuItem<Province>(
+                        value: province,
+                        child: Text(province.provinceName ?? ""),
+                      );
+                    }).toList(),
+                    onChanged: (province) {
+                      selectedProvince = province;
+                      selectedDistrict = null;
+                      selectedWard = null;
+                      listWard = [];
+                      AddressAPI.getListDistrict(province!.provinceId ?? "")
+                          .then((data) {
+                        listDistrict = data;
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "Province/City",
+                      hintText: "Select",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<District>(
+                    menuMaxHeight: 500,
+                    value: selectedDistrict,
+                    items: listDistrict
+                        .map<DropdownMenuItem<District>>((District district) {
+                      return DropdownMenuItem<District>(
+                        value: district,
+                        child: Text(district.districtName ?? ""),
+                      );
+                    }).toList(),
+                    onChanged: (district) {
+                      selectedDistrict = district;
+                      selectedWard = null;
+                      AddressAPI.getListWard(district!.districtId ?? "")
+                          .then((data) {
+                        listWard = data;
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "District",
+                      hintText: "Select",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  DropdownButtonFormField<Ward>(
+                    menuMaxHeight: 500,
+                    value: selectedWard,
+                    items: listWard.map<DropdownMenuItem<Ward>>((Ward ward) {
+                      return DropdownMenuItem<Ward>(
+                        value: ward,
+                        child: Text(ward.wardName ?? ""),
+                      );
+                    }).toList(),
+                    onChanged: (ward) {
+                      selectedWard = ward;
+                      setState(() {});
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "Ward",
+                      hintText: "Select",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: streetAddress,
+                    onChanged: (value) {},
+                    decoration: const InputDecoration(
+                      labelText: "Street Address",
+                      hintText: "Enter",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          bottomNavigationBar: Container(
+            height: 90,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(10, 8, 16, 8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: kPrimaryColor,
+              border: Border.all(color: const Color(0xfff6f6f6)),
+              color: Colors.white,
             ),
-            child: const Text(
-              "Thêm",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
+            child: GestureDetector(
+              onTap: () {
+                if (recipientName.text != "" &&
+                    recipientPhone.text != "" &&
+                    selectedProvince != null &&
+                    selectedDistrict != null &&
+                    selectedWard != null &&
+                    streetAddress.text != "") {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  ShippingAddressAPI.createShippingAddress(
+                    ShippingAddress(
+                      recipientName: recipientName.text,
+                      recipientPhone: recipientPhone.text,
+                      city: selectedProvince!.provinceName ?? "",
+                      district: selectedDistrict!.districtName ?? "",
+                      ward: selectedWard!.wardName ?? "",
+                      streetAddress: streetAddress.text,
+                    ),
+                  ).then((result) {
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                    if (result) {
+                      Navigator.pop(context);
+                    } else {
+                      showDialogAddShippingAddressFail(context);
+                    }
+                  });
+                } else {
+                  showDialogFillfullField(context);
+                }
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(10, 8, 16, 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: kPrimaryColor,
+                ),
+                child: const Text(
+                  "Add",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ),
           ),
         ),
-      ),
+        isLoading ? const LoadingScreen() : Container(),
+      ],
     );
   }
 }

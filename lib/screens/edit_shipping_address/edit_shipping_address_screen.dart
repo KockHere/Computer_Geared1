@@ -5,9 +5,9 @@ import 'package:shop_app/models/ShippingAddress.dart';
 // ignore: must_be_immutable
 class EditShippingAddressScreen extends StatelessWidget {
   EditShippingAddressScreen({
-    Key? key,
+    super.key,
     required this.shippingAddress,
-  }) : super(key: key);
+  });
 
   ShippingAddress shippingAddress;
 
@@ -19,7 +19,7 @@ class EditShippingAddressScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
-          "Chỉnh sửa địa chỉ",
+          "Edit Shipping Address",
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
@@ -36,18 +36,18 @@ class EditShippingAddressScreen extends StatelessWidget {
                 onChanged: (value) {},
                 initialValue: shippingAddress.recipientName ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Tên người nhận",
-                  hintText: "Nhập tên người nhận",
+                  labelText: "Recipient's Name",
+                  hintText: "Enter Recipient's Name",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 onChanged: (value) {},
-                initialValue: shippingAddress.phone ?? "",
+                initialValue: shippingAddress.recipientPhone ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Số điện thoại",
-                  hintText: "Nhập số điện thoại người nhận",
+                  labelText: "Phone Number",
+                  hintText: "Enter Recipient's Phone Number",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
@@ -56,8 +56,8 @@ class EditShippingAddressScreen extends StatelessWidget {
                 onChanged: (value) {},
                 initialValue: shippingAddress.city ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Tỉnh/Thành phố",
-                  hintText: "Nhập tỉnh/thành phố",
+                  labelText: "Province/City",
+                  hintText: "Select Province/City",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
@@ -66,8 +66,8 @@ class EditShippingAddressScreen extends StatelessWidget {
                 onChanged: (value) {},
                 initialValue: shippingAddress.district ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Quận/Huyện",
-                  hintText: "Nhập quận/huyện",
+                  labelText: "District",
+                  hintText: "Select District",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
@@ -76,8 +76,8 @@ class EditShippingAddressScreen extends StatelessWidget {
                 onChanged: (value) {},
                 initialValue: shippingAddress.ward ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Phường/Xã",
-                  hintText: "Nhập phường/xã",
+                  labelText: "Ward",
+                  hintText: "Select Ward",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
@@ -86,8 +86,8 @@ class EditShippingAddressScreen extends StatelessWidget {
                 onChanged: (value) {},
                 initialValue: shippingAddress.streetAddress ?? "",
                 decoration: const InputDecoration(
-                  labelText: "Địa chỉ",
-                  hintText: "Nhập địa chỉ",
+                  labelText: "Street Address",
+                  hintText: "Enter Street Address",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                 ),
               ),
@@ -114,7 +114,7 @@ class EditShippingAddressScreen extends StatelessWidget {
               color: kPrimaryColor,
             ),
             child: const Text(
-              "Cập nhật",
+              "Update",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

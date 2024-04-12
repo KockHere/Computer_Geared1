@@ -6,7 +6,7 @@ import '../../../models/Product.dart';
 
 class ColorDots extends StatelessWidget {
   const ColorDots({
-    Key? key,
+    super.key,
     required this.product,
     required this.onTap1,
     required this.onTap2,
@@ -14,7 +14,8 @@ class ColorDots extends StatelessWidget {
     required this.quantity,
     required this.onTapMinus,
     required this.onTapPlus,
-  }) : super(key: key);
+    required this.isShowQuantity,
+  });
 
   final Product product;
   final Function() onTap1;
@@ -23,6 +24,7 @@ class ColorDots extends StatelessWidget {
   final int quantity;
   final Function() onTapMinus;
   final Function() onTapPlus;
+  final bool isShowQuantity;
 
   @override
   Widget build(BuildContext context) {
@@ -45,21 +47,23 @@ class ColorDots extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          RoundedIconBtn(
-            icon: Icons.remove,
-            press: onTapMinus,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            "$quantity",
-            style: const TextStyle(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(width: 4),
-          RoundedIconBtn(
-            icon: Icons.add,
-            showShadow: true,
-            press: onTapPlus,
-          ),
+          if (isShowQuantity) ...[
+            RoundedIconBtn(
+              icon: Icons.remove,
+              press: onTapMinus,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              "$quantity",
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(width: 4),
+            RoundedIconBtn(
+              icon: Icons.add,
+              showShadow: true,
+              press: onTapPlus,
+            ),
+          ],
         ],
       ),
     );
@@ -68,10 +72,10 @@ class ColorDots extends StatelessWidget {
 
 class ColorDot extends StatelessWidget {
   const ColorDot({
-    Key? key,
+    super.key,
     required this.color,
     this.isSelected = false,
-  }) : super(key: key);
+  });
 
   final Color color;
   final bool isSelected;

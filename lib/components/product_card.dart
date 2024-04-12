@@ -10,10 +10,10 @@ import 'package:shop_app/variables.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
-    Key? key,
+    super.key,
     required this.product,
     required this.onTapAddToCart,
-  }) : super(key: key);
+  });
 
   final Product product;
   final Function() onTapAddToCart;
@@ -31,7 +31,7 @@ class ProductCard extends StatelessWidget {
         onTap: () => Navigator.pushNamed(
           context,
           DetailsScreen.routeName,
-          arguments: ProductDetailsArguments(product: product),
+          arguments: {"product": product},
         ).then((value) {
           onTapAddToCart();
         }),
@@ -40,9 +40,13 @@ class ProductCard extends StatelessWidget {
           children: [
             AspectRatio(
               aspectRatio: 1,
-              child: Image.network(product.imageLinks!.isNotEmpty
-                  ? product.imageLinks![0]
-                  : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
+              child: Image.network(
+                product.imageLinks!.isNotEmpty
+                    ? product.imageLinks![0]
+                    : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw",
+                errorBuilder: (context, error, stackTrace) => Image.network(
+                    "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
+              ),
             ),
             SizedBox(
               height: 40,
@@ -76,7 +80,38 @@ class ProductCard extends StatelessWidget {
                 isLoading = true;
                 onTapAddToCart();
                 if (user.userId == "") {
+                  isLoading = false;
+                  onTapAddToCart();
                   Navigator.pushNamed(context, SignInScreen.routeName);
+                  // bool isDup = false;
+                  // for (CartItem element in userCart.productList!) {
+                  //   if (element.productId == product.productId) {
+                  //     isDup = true;
+                  //     element.quantity = element.quantity! + 1;
+                  //     break;
+                  //   }
+                  // }
+                  // if (!isDup) {
+                  //   userCart.productList!.add(
+                  //     CartItem(
+                  //       quantity: 1,
+                  //       productId: product.productId,
+                  //       unitPrice: product.unitPrice!,
+                  //       images: product.imageLinks ?? [],
+                  //       productName: product.name ?? "",
+                  //     ),
+                  //   );
+                  // }
+
+                  // userCart.productTotal =
+                  //     (int.parse(userCart.productTotal!) + 1).toString();
+                  // prefs.then((dataPrefs) {
+                  //   dataPrefs.setString(
+                  //       "USER_CART", jsonEncode(userCart.toJson()));
+                  // });
+                  // isLoading = false;
+                  // onTapAddToCart();
+                  // showDialogAddToCartSuccess(context);
                 } else {
                   CartAPI.addCartItem([
                     CartItem(
@@ -85,9 +120,13 @@ class ProductCard extends StatelessWidget {
                       unitPrice: product.unitPrice!,
                     ),
                   ]).then((value) {
-                    isLoading = false;
-                    onTapAddToCart();
-                    showDialogAddToCartSuccess(context);
+                    CartAPI.getUserCart().then(
+                      (value) {
+                        isLoading = false;
+                        onTapAddToCart();
+                        showDialogAddToCartSuccess(context);
+                      },
+                    );
                   });
                 }
               },
@@ -99,7 +138,7 @@ class ProductCard extends StatelessWidget {
                   border: Border.all(color: const Color(0xff1435c3)),
                 ),
                 child: const Text(
-                  "Thêm vào giỏ hàng",
+                  "Add To Cart",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Color(0xff1435c3),

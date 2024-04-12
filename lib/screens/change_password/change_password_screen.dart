@@ -21,7 +21,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
-          "Đổi mật khẩu",
+          "Change Password",
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
@@ -38,8 +38,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 obscureText: isObscurePassword,
                 onChanged: (value) {},
                 decoration: InputDecoration(
-                  labelText: "Mật khẩu hiện tại",
-                  hintText: "Nhập mật khẩu hiện tại",
+                  labelText: "Current Password",
+                  hintText: "Enter Current Password",
                   // If  you are using latest version of flutter then lable text and hint text shown like this
                   // if you r using flutter less then 1.20.* then maybe this is not working properly
                   floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -62,8 +62,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 obscureText: isObscureNewPassword,
                 onChanged: (value) {},
                 decoration: InputDecoration(
-                  labelText: "Mật khẩu mới",
-                  hintText: "Nhập mật khẩu mới",
+                  labelText: "New Password",
+                  hintText: "Enter New Password",
                   // If  you are using latest version of flutter then lable text and hint text shown like this
                   // if you r using flutter less then 1.20.* then maybe this is not working properly
                   floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -86,8 +86,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 obscureText: isObscureConfirmPassword,
                 onChanged: (value) {},
                 decoration: InputDecoration(
-                  labelText: "Xác nhận mật khẩu mới",
-                  hintText: "Nhập lại mật khẩu mới",
+                  labelText: "Confirm New Password",
+                  hintText: "Enter New Password",
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   suffixIcon: GestureDetector(
                     onTap: () {
@@ -126,7 +126,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               color: kPrimaryColor,
             ),
             child: const Text(
-              "Đổi mật khẩu",
+              "Change Password",
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

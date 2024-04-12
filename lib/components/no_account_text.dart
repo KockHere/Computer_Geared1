@@ -14,13 +14,13 @@ class NoAccountText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          "Chưa có tài khoản? ",
+          "Don't have an Account? ",
           style: TextStyle(fontSize: 16),
         ),
         GestureDetector(
           onTap: () => Navigator.pushNamed(context, SignUpScreen.routeName),
           child: const Text(
-            "Đăng ký",
+            "Sign Up",
             style: TextStyle(fontSize: 16, color: kPrimaryColor),
           ),
         ),

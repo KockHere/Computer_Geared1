@@ -25,25 +25,32 @@ class _ProductImagesState extends State<ProductImages> {
           width: 238,
           child: AspectRatio(
             aspectRatio: 1,
-            child: Image.network(widget.product.imageLinks!.isNotEmpty ? widget.product.imageLinks![selectedImage] : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
+            child: Image.network(widget.product.imageLinks!.isNotEmpty
+                ? widget.product.imageLinks![selectedImage]
+                : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...List.generate(
-              widget.product.imageLinks!.isNotEmpty ? widget.product.imageLinks!.length : 0,
-              (index) => SmallProductImage(
-                isSelected: index == selectedImage,
-                press: () {
-                  setState(() {
-                    selectedImage = index;
-                  });
-                },
-                image: widget.product.imageLinks![index],
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...List.generate(
+                widget.product.imageLinks!.isNotEmpty
+                    ? widget.product.imageLinks!.length
+                    : 0,
+                (index) => SmallProductImage(
+                  isSelected: index == selectedImage,
+                  press: () {
+                    setState(() {
+                      selectedImage = index;
+                    });
+                  },
+                  image: widget.product.imageLinks![index],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );

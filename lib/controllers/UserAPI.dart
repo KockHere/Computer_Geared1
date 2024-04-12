@@ -9,7 +9,7 @@ import 'package:shop_app/variables.dart';
 
 class UserAPI {
   static Future<User> login(String email, String password) async {
-    User user = User(userId: "");
+    user = User(userId: "");
     final Map<String, dynamic> data = <String, dynamic>{};
     data["email"] = email;
     data["password"] = password;
@@ -23,6 +23,9 @@ class UserAPI {
     if (response.statusCode == 200) {
       var bodyJson = json.decode(utf8.decode(response.bodyBytes));
       user = User.fromJson(bodyJson);
+      prefs.then((dataPrefs) {
+        dataPrefs.setString("USER", jsonEncode(user.toJson()));
+      });
     }
     return user;
   }

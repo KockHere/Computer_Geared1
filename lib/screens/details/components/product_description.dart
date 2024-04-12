@@ -5,11 +5,13 @@ import 'package:expandable_text/expandable_text.dart';
 
 class ProductDescription extends StatelessWidget {
   const ProductDescription({
-    Key? key,
+    super.key,
     required this.product,
-  }) : super(key: key);
+    required this.specification,
+  });
 
   final Product product;
+  final String specification;
 
   @override
   Widget build(BuildContext context) {
@@ -23,28 +25,31 @@ class ProductDescription extends StatelessWidget {
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ),
-        product.brandName == "" ? Container() : Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            children: [
-              const Text(
-                "Thương hiệu: ",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: kPrimaryColor,
+        product.brandName == ""
+            ? Container()
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  children: [
+                    const Text(
+                      "Brand: ",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                    Text(
+                      "${product.brandName}",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                "${product.brandName}",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: kPrimaryColor,
-                ),
-              ),
-            ],
-          ),
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Text(
@@ -64,10 +69,25 @@ class ProductDescription extends StatelessWidget {
           child: ExpandableText(
             product.description ?? "",
             maxLines: 3,
-            expandText: "Xem thêm",
+            expandText: "See more",
             expandOnTextTap: true,
             collapseOnTextTap: true,
-            collapseText: "Xem ít",
+            collapseText: "See less",
+            linkColor: kPrimaryColor,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+          ),
+          child: ExpandableText(
+            specification,
+            maxLines: 3,
+            expandText: "See more",
+            expandOnTextTap: true,
+            collapseOnTextTap: true,
+            collapseText: "See less",
             linkColor: kPrimaryColor,
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_app/controllers/UserAPI.dart';
 import 'package:shop_app/helper/keyboard.dart';
 import 'package:shop_app/models/User.dart';
+import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/show_dialog.dart';
 import 'package:shop_app/variables.dart';
 
@@ -73,8 +74,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
               return null;
             },
             decoration: const InputDecoration(
-              labelText: "Họ",
-              hintText: "Nhập họ của bạn",
+              labelText: "First Name",
+              hintText: "Enter Your First Name",
               // If  you are using latest version of flutter then lable text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -85,8 +86,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
           TextFormField(
             controller: lastNameController,
             decoration: const InputDecoration(
-              labelText: "Tên",
-              hintText: "Nhập tên của bạn",
+              labelText: "Last Name",
+              hintText: "Enter Your Last Name",
               // If  you are using latest version of flutter then lable text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -111,8 +112,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
               return null;
             },
             decoration: const InputDecoration(
-              labelText: "Số điện thoại",
-              hintText: "Nhập số điện thoại",
+              labelText: "Phone Number",
+              hintText: "Enter Phone Number",
               // If  you are using latest version of flutter then lable text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -135,16 +136,18 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                 isLoading = true;
                 widget.onSetState();
                 if (await UserAPI.register(user)) {
-                  removeError(error: "Email đã tồn tại");
-                  isLoading = true;
+                  removeError(error: "This Email has already exist!");
+                  isLoading = false;
                   widget.onSetState();
-                  showDialogRegisterSuccess(context);
+                  showDialogRegisterSuccess(context).then((value) {
+                    Navigator.pushNamed(context, SignInScreen.routeName);
+                  });
                 } else {
-                  addError(error: "Email đã tồn tại");
+                  addError(error: "This Email has already exist!");
                 }
               }
             },
-            child: const Text("Đăng ký"),
+            child: const Text("Sign up"),
           ),
         ],
       ),

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/models/Category.dart';
 import 'package:shop_app/models/Product.dart';
+import 'package:shop_app/screens/init_screen.dart';
 import 'package:shop_app/screens/products/products_screen.dart';
 
 class Categories extends StatelessWidget {
   const Categories({
-    Key? key,
+    super.key,
     required this.categories,
     required this.listAllProduct,
-  }) : super(key: key);
+  });
 
   final List<Category> categories;
   final List<Product> listAllProduct;
@@ -21,29 +22,44 @@ class Categories extends StatelessWidget {
         crossAxisCount: 4,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        children: List.generate(
-          categories.length > 8 ? 8 : categories.length,
-          (index) => CategoryCard(
-            icon: categories[index].image != ""
-                ? categories[index].image!
-                : "https://lh3.googleusercontent.com/2701fTP9z5BT0Jn40Jc6qiXij824-WxAM6wavqFHvf7tp5WLkpJwh7Kn6TsesgatH_avVdZMkVtu8qfpZ3jfkWDsIeXYKg-L=rw",
-            text: categories[index].name ?? "",
+        children: [
+          ...List.generate(
+            categories.length > 7 ? 7 : categories.length,
+            (index) => CategoryCard(
+              icon: categories[index].image != ""
+                  ? categories[index].image!
+                  : "https://lh3.googleusercontent.com/2701fTP9z5BT0Jn40Jc6qiXij824-WxAM6wavqFHvf7tp5WLkpJwh7Kn6TsesgatH_avVdZMkVtu8qfpZ3jfkWDsIeXYKg-L=rw",
+              text: categories[index].name ?? "",
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductsScreen(
+                      title: categories[index].name ?? "",
+                      products: listAllProduct
+                          .where((element) => element.categoryName!
+                              .toLowerCase()
+                              .contains(categories[index].name!.toLowerCase()))
+                          .toList(),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          CategoryCard(
+            icon: "",
+            text: "All",
             press: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProductsScreen(
-                    title: categories[index].name ?? "",
-                    products: listAllProduct
-                        .where((element) =>
-                            element.categoryName!.toLowerCase().contains(categories[index].name!.toLowerCase()))
-                        .toList(),
-                  ),
+                  builder: (context) => const InitScreen(initIndex: 1),
                 ),
               );
             },
           ),
-        ),
+        ],
       ),
     );
   }
@@ -51,11 +67,11 @@ class Categories extends StatelessWidget {
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
     required this.press,
-  }) : super(key: key);
+  });
 
   final String icon, text;
   final GestureTapCallback press;
@@ -69,7 +85,13 @@ class CategoryCard extends StatelessWidget {
           SizedBox(
             height: 56,
             width: 56,
-            child: Image.network(icon),
+            child: icon.isEmpty
+                ? Container(
+                    color: Colors.transparent,
+                    alignment: Alignment.bottomCenter,
+                    child: const Icon(Icons.more_horiz),
+                  )
+                : Image.network(icon),
           ),
           const SizedBox(height: 4),
           Text(text, textAlign: TextAlign.center)

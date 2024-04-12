@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:shop_app/screens/notification/notification_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/variables.dart';
 
@@ -11,10 +10,10 @@ import 'search_field.dart';
 
 class HomeHeader extends StatelessWidget {
   HomeHeader({
-    Key? key,
+    super.key,
     required this.numberOfProduct,
     required this.onSetState,
-  }) : super(key: key);
+  });
 
   int numberOfProduct;
   Function() onSetState;
@@ -42,22 +41,22 @@ class HomeHeader extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(width: 8),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/Bell.svg",
-            numOfitem: user.userId == "" ? 0 : 9,
-            press: () {
-              if (user.userId == "") {
-                Navigator.pushNamed(context, SignInScreen.routeName);
-              } else {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NotificationScreen()),
-                );
-              }
-            },
-          ),
+          // const SizedBox(width: 8),
+          // IconBtnWithCounter(
+          //   svgSrc: "assets/icons/Bell.svg",
+          //   numOfitem: user.userId == "" ? 0 : 9,
+          //   press: () {
+          //     if (user.userId == "") {
+          //       Navigator.pushNamed(context, SignInScreen.routeName);
+          //     } else {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) => const NotificationScreen()),
+          //       );
+          //     }
+          //   },
+          // ),
         ],
       ),
     );

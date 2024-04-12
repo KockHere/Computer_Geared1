@@ -19,24 +19,26 @@ class ProductVertical extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: const Color(0xfff6f6f6),
-      child: products.isNotEmpty ? Container(
-        padding: const EdgeInsets.all(20),
-        child: GridView.count(
-          childAspectRatio: 0.46,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 16,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          children: List.generate(
-            products.length,
-            (index) => ProductCard(
-              product: products[index],
-              onTapAddToCart: onTapAddToCart,
-            ),
-          ),
-        ),
-      ) : const Center(child: Text("Không có sản phẩm nào")),
+      child: products.isNotEmpty
+          ? Container(
+              padding: const EdgeInsets.all(20),
+              child: GridView.count(
+                childAspectRatio: 0.42,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 16,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                children: List.generate(
+                  products.length,
+                  (index) => ProductCard(
+                    product: products[index],
+                    onTapAddToCart: onTapAddToCart,
+                  ),
+                ),
+              ),
+            )
+          : const Center(child: Text("No Product")),
     );
   }
 }

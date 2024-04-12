@@ -23,7 +23,7 @@ class CategoryHorizontal extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: Text(
-              "Tất cả sản phẩm",
+              "All Products",
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 22,
@@ -43,15 +43,18 @@ class CategoryHorizontal extends StatelessWidget {
                     (index) {
                       return GestureDetector(
                         onTap: () {
-                          onTap(categories[index].name ?? "Tất cả");
+                          onTap(categories[index].name ?? "All");
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 20),
                           margin: const EdgeInsets.only(right: 20),
-                          decoration: categoryActive == categories[index].name ? BoxDecoration(
-                            borderRadius: BorderRadius.circular(22),
-                            color: const Color(0xfff6f6f6),
-                          ) : null,
+                          decoration: categoryActive == categories[index].name
+                              ? BoxDecoration(
+                                  borderRadius: BorderRadius.circular(22),
+                                  color: const Color(0xfff6f6f6),
+                                )
+                              : null,
                           child: Text(
                             categories[index].name ?? "",
                             style: const TextStyle(

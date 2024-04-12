@@ -14,6 +14,7 @@ class CategoryAPI {
       Uri.parse("${urlApi}category"),
       headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.acceptHeader: 'application/json',
       },
     );
     if (response.statusCode == 200) {

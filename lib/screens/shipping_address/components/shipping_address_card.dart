@@ -4,11 +4,11 @@ import 'package:shop_app/models/ShippingAddress.dart';
 
 class ShippingAddressCard extends StatelessWidget {
   const ShippingAddressCard({
-    Key? key,
+    super.key,
     required this.shippingAddress,
     required this.isDefault,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final ShippingAddress shippingAddress;
   final bool isDefault;
@@ -53,7 +53,7 @@ class ShippingAddressCard extends StatelessWidget {
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
                     ),
                     child: const Text(
-                      "Mặc định",
+                      "Default Address",
                       style: TextStyle(
                         color: kPrimaryColor,
                         fontSize: 14,
@@ -66,7 +66,7 @@ class ShippingAddressCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              shippingAddress.phone ?? "",
+              shippingAddress.recipientPhone ?? "",
               style: const TextStyle(
                 color: inActiveIconColor,
                 fontSize: 15,

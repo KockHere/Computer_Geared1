@@ -19,6 +19,7 @@ class AddressAPI {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
     );
+    
     if (response.statusCode == 200) {
       Map<String, dynamic> bodyJson = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> result = bodyJson["results"];

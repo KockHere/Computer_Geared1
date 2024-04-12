@@ -36,7 +36,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Đăng ký'),
+        title: const Text('Sign Up'),
       ),
       body: Stack(
         children: [
@@ -49,9 +49,9 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 16),
-                      const Text("Hoàn tất thông tin", style: headingStyle),
+                      const Text("Complete Profile", style: headingStyle),
                       const Text(
-                        "Hoàn tất thông tin cá nhân của bạn",
+                        "Complete Your Profile",
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
@@ -63,11 +63,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                         },
                       ),
                       const SizedBox(height: 30),
-                      Text(
-                        'Tiếp tục bằng cách đông ý với \nđiều khoản của chúng tôi',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      )
+                      // Text(
+                      //   'Continue by agreeing \nwith our Term',
+                      //   textAlign: TextAlign.center,
+                      //   style: Theme.of(context).textTheme.bodySmall,
+                      // )
                     ],
                   ),
                 ),

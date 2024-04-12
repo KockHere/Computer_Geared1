@@ -34,7 +34,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     color: const Color(0xfff6f6f6),
                     child: GridView.builder(
                       itemCount: widget.products.length,
-                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 200,
                         childAspectRatio: 0.46,
                         mainAxisSpacing: 20,
@@ -48,7 +49,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       ),
                     ),
                   )
-                : const Center(child: Text("Không có sản phẩm nào")),
+                : const Center(child: Text("No Product")),
           ),
           isLoading ? const LoadingScreen() : Container(),
         ],

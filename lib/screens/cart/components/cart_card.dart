@@ -6,20 +6,26 @@ import '../../../models/CartItem.dart';
 
 class CartCard extends StatelessWidget {
   const CartCard({
-    Key? key,
+    super.key,
     required this.cartItem,
     required this.onTapMinus,
     required this.onTapPlus,
-  }) : super(key: key);
+    this.isShow,
+  });
 
   final CartItem cartItem;
   final Function() onTapMinus;
   final Function() onTapPlus;
+  final bool? isShow;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Row(
         children: [
           SizedBox(
@@ -32,9 +38,13 @@ class CartCard extends StatelessWidget {
                   color: const Color(0xFFF5F6F9),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Image.network(cartItem.images!.isNotEmpty
-                    ? cartItem.images![0]
-                    : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
+                child: Image.network(
+                  cartItem.images!.isNotEmpty
+                      ? cartItem.images![0]
+                      : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw",
+                  errorBuilder: (context, error, stackTrace) => Image.network(
+                      "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
+                ),
               ),
             ),
           ),
@@ -52,29 +62,35 @@ class CartCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "${cartItem.unitPrice}đ",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, color: kPrimaryColor),
+                    Expanded(
+                      child: Text(
+                        "${cartItem.unitPrice}đ",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, color: kPrimaryColor),
+                      ),
                     ),
                     Row(
                       children: [
-                        RoundedIconBtn(
-                          icon: Icons.remove,
-                          showShadow: true,
-                          press: onTapMinus,
-                        ),
+                        isShow == true
+                            ? Container()
+                            : RoundedIconBtn(
+                                icon: Icons.remove,
+                                showShadow: true,
+                                press: onTapMinus,
+                              ),
                         const SizedBox(width: 4),
                         Text(
                           "x${cartItem.quantity}",
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(width: 4),
-                        RoundedIconBtn(
-                          icon: Icons.add,
-                          showShadow: true,
-                          press: onTapPlus,
-                        ),
+                        isShow == true
+                            ? Container()
+                            : RoundedIconBtn(
+                                icon: Icons.add,
+                                showShadow: true,
+                                press: onTapPlus,
+                              ),
                       ],
                     ),
                   ],

@@ -76,7 +76,7 @@ class _SignUpFormState extends State<SignUpForm> {
             },
             decoration: const InputDecoration(
               labelText: "Email",
-              hintText: "Nhập email",
+              hintText: "Enter email",
               // If  you are using latest version of flutter then lable text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -106,8 +106,8 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
             decoration: InputDecoration(
-              labelText: "Mật khẩu",
-              hintText: "Nhập mật khẩu",
+              labelText: "Password",
+              hintText: "Enter Password",
               // If  you are using latest version of flutter then lable text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -145,8 +145,8 @@ class _SignUpFormState extends State<SignUpForm> {
               return null;
             },
             decoration: InputDecoration(
-              labelText: "Xác nhận mật khẩu",
-              hintText: "Nhập lại mật khẩu",
+              labelText: "Confirm Password",
+              hintText: "Re-enter Password",
               // If  you are using latest version of flutter then lable text and hint text shown like this
               // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -172,7 +172,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     arguments: {"email": email, "password": password});
               }
             },
-            child: const Text("Tiếp tục"),
+            child: const Text("Continue"),
           ),
         ],
       ),

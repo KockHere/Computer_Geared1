@@ -4,16 +4,17 @@ import '../../../models/CartItem.dart';
 
 class CartCard extends StatelessWidget {
   const CartCard({
-    Key? key,
+    super.key,
     required this.cartItem,
-  }) : super(key: key);
+  });
 
   final CartItem cartItem;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      color: Colors.white,
       child: Row(
         children: [
           SizedBox(
@@ -43,17 +44,20 @@ class CartCard extends StatelessWidget {
                   maxLines: 3,
                 ),
                 const SizedBox(height: 8),
-                Text.rich(
-                  TextSpan(
-                    text: "${cartItem.unitPrice}đ",
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600, color: kPrimaryColor),
-                    children: [
-                      TextSpan(
-                          text: " x${cartItem.quantity}",
-                          style: Theme.of(context).textTheme.bodyLarge),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "${cartItem.unitPrice}đ",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, color: kPrimaryColor),
+                      ),
+                    ),
+                    Text(
+                      " x${cartItem.quantity}",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ],
                 ),
               ],
             ),

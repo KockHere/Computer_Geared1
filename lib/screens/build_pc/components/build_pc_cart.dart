@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/components/rounded_icon_btn.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/CartItem.dart';
 import 'package:shop_app/models/Category.dart';
-import 'package:shop_app/models/Product.dart';
 
 class BuildPCCard extends StatelessWidget {
   const BuildPCCard({
-    Key? key,
+    super.key,
     required this.category,
     required this.onTap,
     required this.onTapEdit,
     required this.onTapDelete,
-    required this.listAllProduct,
     required this.cartItem,
     required this.onTapPlus,
     required this.onTapMinus,
-  }) : super(key: key);
+    required this.onTapProduct,
+  });
 
   final Category category;
   final Function() onTap;
   final Function() onTapEdit;
   final Function() onTapDelete;
-  final List<Product> listAllProduct;
   final CartItem cartItem;
   final Function(String?) onTapPlus;
   final Function(String?) onTapMinus;
+  final Function() onTapProduct;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +41,7 @@ class BuildPCCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                category.name ?? "",
+                category.description ?? "",
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               cartItem.productId == ""
@@ -63,7 +61,7 @@ class BuildPCCard extends StatelessWidget {
                             ),
                             SizedBox(width: 8),
                             Text(
-                              "Chọn",
+                              "Select",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600),
@@ -109,66 +107,74 @@ class BuildPCCard extends StatelessWidget {
           ),
           if (cartItem.productId != "") ...[
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 100,
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Image.network(cartItem.images!.isNotEmpty
-                        ? cartItem.images![0]
-                        : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
+            GestureDetector(
+              onTap: onTapProduct,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 100,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Image.network(
+                        cartItem.images!.isNotEmpty
+                            ? cartItem.images![0]
+                            : "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw",
+                        errorBuilder: (context, error, stackTrace) => Image.network(
+                            "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          cartItem.productName ?? "",
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                          maxLines: 3,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "${cartItem.unitPrice}đ",
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: kPrimaryColor),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
                     children: [
+                      // RoundedIconBtn(
+                      //   icon: Icons.add,
+                      //   showShadow: true,
+                      //   press: () {
+                      //     onTapPlus(cartItem.productId);
+                      //   },
+                      // ),
+                      const SizedBox(height: 4),
                       Text(
-                        cartItem.productName ?? "",
-                        overflow: TextOverflow.ellipsis,
+                        "x${cartItem.quantity}",
                         style: const TextStyle(fontWeight: FontWeight.w600),
-                        maxLines: 3,
+                        maxLines: 2,
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        "${cartItem.unitPrice}đ",
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, color: kPrimaryColor),
-                      ),
+                      const SizedBox(height: 4),
+                      // RoundedIconBtn(
+                      //   icon: Icons.remove,
+                      //   showShadow: true,
+                      //   press: () {
+                      //     onTapMinus(cartItem.productId);
+                      //   },
+                      // ),
                     ],
                   ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  children: [
-                    RoundedIconBtn(
-                      icon: Icons.add,
-                      showShadow: true,
-                      press: () {
-                        onTapPlus(cartItem.productId);
-                      },
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "${cartItem.quantity}",
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      maxLines: 2,
-                    ),
-                    const SizedBox(height: 4),
-                    RoundedIconBtn(
-                      icon: Icons.remove,
-                      showShadow: true,
-                      press: () {
-                        onTapMinus(cartItem.productId);
-                      },
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ],

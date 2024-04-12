@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/checkout/checkout_screen.dart';
+import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
+import 'package:shop_app/variables.dart';
 
 class ContinueCard extends StatelessWidget {
   const ContinueCard({
-    Key? key,
+    super.key,
     required this.totalPrice,
-  }) : super(key: key);
+  });
 
   final double totalPrice;
 
@@ -44,7 +46,7 @@ class ContinueCard extends StatelessWidget {
                 Expanded(
                   child: Text.rich(
                     TextSpan(
-                      text: "Tổng:\n",
+                      text: "Total:\n",
                       children: [
                         TextSpan(
                           text:
@@ -59,15 +61,19 @@ class ContinueCard extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      if (totalPrice != 0) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const CheckoutScreen()),
-                        );
+                      if (user.userId == "") {
+                        Navigator.pushNamed(context, SignInScreen.routeName);
+                      } else {
+                        if (totalPrice != 0) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CheckoutScreen()),
+                          );
+                        }
                       }
                     },
-                    child: const Text("Tiếp tục"),
+                    child: const Text("Continue"),
                   ),
                 ),
               ],

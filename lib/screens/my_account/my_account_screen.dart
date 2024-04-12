@@ -47,7 +47,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    "Thông tin cá nhân",
+                    "User's Profile",
                     style: TextStyle(
                       color: inActiveIconColor,
                       fontSize: 16,
@@ -76,11 +76,11 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
               color: Colors.white,
               child: Column(
                 children: [
-                  RawInfor(title: "Họ:", data: user.firstName ?? ""),
-                  RawInfor(title: "Tên:", data: user.lastName ?? ""),
+                  RawInfor(title: "First Name:", data: user.firstName ?? ""),
+                  RawInfor(title: "Last Name:", data: user.lastName ?? ""),
                   RawInfor(title: "Email:", data: user.email ?? ""),
                   RawInfor(
-                      title: "Số điện thoại:", data: user.phoneNumber ?? ""),
+                      title: "Phone Number:", data: user.phoneNumber ?? ""),
                 ],
               ),
             ),
