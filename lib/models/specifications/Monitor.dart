@@ -87,7 +87,19 @@ class Monitor {
             ? []
             : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
-        "Product Specification Type": productSpecificationType,
+        "product_specification_type": productSpecificationType,
+        "brand": brand,
+        "model": model,
+        "screen_size": screenSize,
+        "resolution": resolution,
+        "response_time": responseTime,
+        "aspect_ration": aspectRation,
+        "refresh_rate": refreshRate,
+        "panel_type": panelType,
+      };
+
+  Map<String, dynamic> toJson1() => {
+        //"Product Specification Type": productSpecificationType,
         "Brand": brand,
         "Model": model,
         "Screen Size": screenSize,

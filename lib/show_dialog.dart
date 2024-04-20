@@ -217,3 +217,54 @@ Future<void> showDialogAddOrderSuccess(BuildContext context) async {
     },
   );
 }
+
+Future<void> showDialogRequiredPart(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Alert'),
+        content: const Text('You haven\'t picked enough parts for a PC!'),
+        actions: <Widget>[
+          const SizedBox(width: 20),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Confirm',
+                style: TextStyle(
+                    color: kPrimaryColor, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> showDialogUpdateUserSuccess(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Icon(Icons.check_circle_outline,
+            size: 50, color: Colors.green),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [Text('Update profile successful!')],
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Confirm",
+                style: TextStyle(
+                    color: kPrimaryColor, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      );
+    },
+  );
+}

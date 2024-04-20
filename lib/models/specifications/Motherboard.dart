@@ -9,6 +9,7 @@ class Motherboard {
   int? discount;
   int? sold;
   String? categoryName;
+  String? productBrandId;
   String? brandName;
   List<String>? imageLinks;
   String? specificationId;
@@ -35,7 +36,7 @@ class Motherboard {
   String? audioCodec;
   double? bluetooth;
   String? wifi;
-  String? formFactor;
+  int? formFactor;
   String? brand;
 
   Motherboard({
@@ -47,6 +48,7 @@ class Motherboard {
     this.discount,
     this.sold,
     this.categoryName,
+    this.productBrandId,
     this.brandName,
     this.imageLinks,
     this.specificationId,
@@ -91,6 +93,7 @@ class Motherboard {
                 .replaceAll(".", "")),
         sold: json["sold"],
         categoryName: json["category_name"],
+        productBrandId: json["product_brand_id"] ?? "",
         brandName: json["brand_name"],
         imageLinks: json["image_links"] == null ||
                 json["image_links"].isEmpty ||
@@ -132,6 +135,7 @@ class Motherboard {
 
   Map<String, dynamic> toJson() => {
         "primary_product_id": primaryProductId,
+        "motherboard_id": productId,
         "name": name,
         "description": description,
         "unit_price": unitPrice,
@@ -139,25 +143,53 @@ class Motherboard {
         "discount": discount,
         "sold": sold,
         "category_name": categoryName,
+        "product_brand_id": productBrandId,
         "brand_name": brandName,
         "image_links": imageLinks == null
             ? []
             : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
         "product_id": productId,
-        "Product Specification Type": productSpecificationType,
+        "product_specification_type": productSpecificationType,
+        "chipset": chipset,
+        "spu_socket": spuSocket,
+        "usb_details": usbDetails,
+        "audio": audio,
+        "ethernet_controller": ethernetController,
+        "wifi_antenna": wifiAntenna,
+        "memory_slots": memorySlots,
+        "memory_supports": memorySupports,
+        "maximum_capacity": maximumCapacity,
+        "channel_architecture": channelArchitecture,
+        "sata": sata,
+        "m2": m2,
+        "raid_support": raidSupport,
+        "expansion_slots": expansionSlots,
+        "air_cooling": airCooling,
+        "power_connectors": powerConnectors,
+        "audio_internal": audioInternal,
+        "rom": rom,
+        "audio_codec": audioCodec,
+        "bluetooth": bluetooth,
+        "wifi": wifi,
+        "form_factor": formFactor,
+        "brand": brand,
+      };
+
+  Map<String, dynamic> toJson1() => {
+        //"Product Specification Type": productSpecificationType,
+        "Brand": brand,
         "Chipset": chipset,
-        "SPU Socket": spuSocket,
+        "CPU Socket": spuSocket,
         "USB Details": usbDetails,
         "Audio": audio,
         "Ethernet Controller": ethernetController,
         "WiFi Antenna": wifiAntenna,
         "Memory Slots": memorySlots,
         "Memory Supports": memorySupports,
-        "Maximum Capacity": maximumCapacity,
         "Channel Architecture": channelArchitecture,
         "SATA": sata,
-        "m2": m2,
+        "M.2": m2,
         "RAID Support": raidSupport,
         "Expansion Slots": expansionSlots,
         "Air Cooling": airCooling,
@@ -168,6 +200,5 @@ class Motherboard {
         "Bluetooth": bluetooth,
         "WiFi": wifi,
         "Form Factor": formFactor,
-        //"Brand": brand,
       };
 }

@@ -77,22 +77,28 @@ class PCComponentAPI {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (category != "processor") {
       data["processorDetails"] = processor.productId == "" ? null : processor;
+      data["processor_brand_id"] = processor.productBrandId ?? "";
     }
     if (category != "motherboard") {
       data["motherboardDetail"] =
           motherboard.productId == "" ? null : motherboard;
+      data["motherboard_brand_id"] = motherboard.productBrandId ?? "";
     }
     if (category != "case") {
       data["caseDetails"] = caseSpec.productId == "" ? null : caseSpec;
+      data["case_brand_id"] = caseSpec.productBrandId ?? "";
     }
     if (category != "gpu") {
       data["gpuDetail"] = gpu.productId == "" ? null : gpu;
+      data["gpu_brand_id"] = gpu.productBrandId ?? "";
     }
     if (category != "ram") {
       data["ramDetails"] = ram.productId == "" ? null : ram;
+      data["ram_brand_id"] = ram.productBrandId ?? "";
     }
     if (category != "storage") {
       data["storageDetail"] = storage.productId == "" ? null : storage;
+      data["storage_brand_id"] = storage.productBrandId ?? "";
     }
 
     if (category.toLowerCase() == "gpu") {

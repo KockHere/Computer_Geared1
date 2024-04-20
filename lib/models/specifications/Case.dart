@@ -7,6 +7,7 @@ class Case {
   int? discount;
   int? sold;
   String? categoryName;
+  String? productBrandId;
   String? brandName;
   List<String>? imageLinks;
   String? specificationId;
@@ -19,10 +20,10 @@ class Case {
   String? color;
   String? motherboardSupports;
   String? internalDriveSize;
-  String? gpuLength;
+  int? gpuLength;
   String? supportPsuSize;
   String? frontPanel;
-  String? cpuCoolerSupportSize;
+  int? cpuCoolerSupportSize;
 
   Case({
     this.primaryProductId,
@@ -33,6 +34,7 @@ class Case {
     this.discount,
     this.sold,
     this.categoryName,
+    this.productBrandId,
     this.brandName,
     this.imageLinks,
     this.specificationId,
@@ -65,6 +67,7 @@ class Case {
                 .replaceAll(".", "")),
         sold: json["sold"],
         categoryName: json["category_name"],
+        productBrandId: json["product_brand_id"] ?? "",
         brandName: json["brand_name"],
         imageLinks: json["image_links"] == null ||
                 json["image_links"].isEmpty ||
@@ -89,6 +92,7 @@ class Case {
 
   Map<String, dynamic> toJson() => {
         "primary_product_id": primaryProductId,
+        "case_id": productId,
         "name": name,
         "description": description,
         "unit_price": unitPrice,
@@ -96,15 +100,30 @@ class Case {
         "discount": discount,
         "sold": sold,
         "category_name": categoryName,
+        "product_brand_id": productBrandId,
         "brand_name": brandName,
         "image_links": imageLinks == null
             ? []
             : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
         "product_id": productId,
-        "Product Specification type": productSpecificationType,
+        "product_specification_type": productSpecificationType,
+        "brand": brand,
+        "model": model,
+        "cabinet_type": cabinetType,
+        "side_panel_type": sidePanelType,
+        "color": color,
+        "motherboard_supports": motherboardSupports,
+        "internal_drive_size": internalDriveSize,
+        "gpu_length": gpuLength,
+        "support_psu_size": supportPsuSize,
+        "front_panel": frontPanel,
+        "cpu_cooler_support_size": cpuCoolerSupportSize,
+      };
+
+  Map<String, dynamic> toJson1() => {
+        //"Product Specification type": productSpecificationType,
         "Brand": brand,
-        "Model": model,
         "Cabinet Type": cabinetType,
         "Side Panel Type": sidePanelType,
         "Color": color,

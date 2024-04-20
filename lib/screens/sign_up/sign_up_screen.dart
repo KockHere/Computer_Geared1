@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../constants.dart';
 import 'components/sign_up_form.dart';
@@ -53,35 +52,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    "Or",
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.8),
-                          spreadRadius: 5,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset("assets/icons/google-icon.svg"),
-                        const SizedBox(width: 8),
-                        const Text("Sign In With Google"),
-                      ],
-                    ),
-                  ),
+                  // const Text(
+                  //   "Or",
+                  //   textAlign: TextAlign.center,
+                  // ),
+                  // const SizedBox(height: 16),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(
+                  //       vertical: 14, horizontal: 20),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         color: Colors.grey.withOpacity(0.8),
+                  //         spreadRadius: 5,
+                  //         blurRadius: 5,
+                  //         offset: const Offset(0, 3),
+                  //       ),
+                  //     ],
+                  //     borderRadius: BorderRadius.circular(14),
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       SvgPicture.asset("assets/icons/google-icon.svg"),
+                  //       const SizedBox(width: 8),
+                  //       const Text("Sign In With Google"),
+                  //     ],
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
                   // Text(
                   //   'Continue by agreeing \nwith our Term',

@@ -3,11 +3,11 @@ import 'package:shop_app/models/Category.dart';
 
 class CategoryHorizontal extends StatelessWidget {
   const CategoryHorizontal({
-    Key? key,
+    super.key,
     required this.categoryActive,
     required this.categories,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final String categoryActive;
   final List<Category> categories;

@@ -81,7 +81,17 @@ class CaseCooler {
             ? []
             : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
-        "Product Specification Type": productSpecificationType,
+        "product_specification_type": productSpecificationType,
+        "brand": brand,
+        "model": model,
+        "airflow": airflow,
+        "fan_rpm": fanRpm,
+        "size": size,
+        "color": color,
+      };
+
+  Map<String, dynamic> toJson1() => {
+        //"Product Specification Type": productSpecificationType,
         "Brand": brand,
         "Model": model,
         "Airflow": airflow,

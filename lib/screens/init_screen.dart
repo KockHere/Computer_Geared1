@@ -17,7 +17,7 @@ class InitScreen extends StatefulWidget {
   const InitScreen({super.key, this.initIndex});
   final int? initIndex;
 
-  static String routeName = "/";
+  static String routeName = "/init";
 
   @override
   State<InitScreen> createState() => _InitScreenState();

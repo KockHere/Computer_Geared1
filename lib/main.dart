@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'The Flutter Way - Template',
+      title: 'Computer Geared',
       theme: AppTheme.lightTheme(context),
       initialRoute: InitScreen.routeName,
       routes: routes,

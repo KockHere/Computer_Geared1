@@ -30,17 +30,59 @@ class UserAPI {
     return user;
   }
 
-  static Future<bool> register(User user) async {
+  static Future<bool> register(User newUser) async {
     final response = await http.post(
       Uri.parse("${urlApi}user/register"),
       headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       },
-      body: jsonEncode(user.toJson()),
+      body: jsonEncode(newUser.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     }
     return false;
+  }
+
+  static Future<bool> update(User newUser) async {
+    final response = await http.put(
+      Uri.parse("${urlApi}auth/information"),
+      headers: <String, String>{
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: user.accessToken ?? "",
+      },
+      body: jsonEncode(newUser.toJson()),
+    );
+    if (response.statusCode == 201) {
+      List<dynamic> bodyJson = json.decode(utf8.decode(response.bodyBytes));
+      user.firstName = bodyJson[0]["first_name"];
+      user.lastName = bodyJson[0]["last_name"];
+      user.phoneNumber = bodyJson[0]["phone_number"];
+      return true;
+    }
+    return false;
+  }
+
+  static Future updateAvatar(File? image) async {
+    if (image == null) return;
+
+    var stream = http.ByteStream(image.openRead());
+    var length = await image.length();
+
+    var uri = Uri.parse("${urlApi}auth/avatar");
+    var request = http.MultipartRequest("POST", uri);
+
+    var multipartFile = http.MultipartFile("image", stream, length,
+        filename: image.path.split('/').last);
+    request.files.add(multipartFile);
+
+    request.headers.addAll({
+      HttpHeaders.authorizationHeader: user.accessToken ?? "",
+    });
+
+    var response = await request.send();
+    var responseData = await response.stream.bytesToString();
+    Map<String, dynamic> responseMap = json.decode(responseData);
+    user.avatar = responseMap["avatar"];
   }
 }

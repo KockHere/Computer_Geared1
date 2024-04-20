@@ -22,6 +22,8 @@ class AutoGen {
     String? storageId;
     Storage? storageSpecification;
     String? totalPrice;
+    String? purpose;
+    int? priceRange;
 
     AutoGen({
         this.preBuildId,
@@ -72,5 +74,7 @@ class AutoGen {
         "storage_id": storageId,
         "storage_specification": storageSpecification?.toJson(),
         "total_price": totalPrice,
+        "purpose": purpose,
+        "price_range": priceRange,
     };
 }

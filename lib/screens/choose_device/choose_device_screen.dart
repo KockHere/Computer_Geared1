@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/controllers/PCComponentAPI.dart';
 import 'package:shop_app/controllers/ProductAPI.dart';
+import 'package:shop_app/models/Category.dart';
 import 'package:shop_app/models/Product.dart';
 import 'package:shop_app/models/specifications/Case.dart';
 import 'package:shop_app/models/specifications/Gpu.dart';
@@ -17,12 +18,12 @@ import '../details/details_screen.dart';
 class ChooseDeviceScreen extends StatefulWidget {
   const ChooseDeviceScreen({
     super.key,
-    required this.title,
+    required this.category,
     required this.listSelectedProduct,
     required this.estimatePower,
   });
 
-  final String title;
+  final Category category;
   final List<Product> listSelectedProduct;
   final int estimatePower;
 
@@ -31,7 +32,14 @@ class ChooseDeviceScreen extends StatefulWidget {
 }
 
 class _ChooseDeviceScreenState extends State<ChooseDeviceScreen> {
+  String selectedSort = "ASC";
+  Brand selectedBrand = Brand(productBrandId: "", productBrandName: "All");
+
+  List<String> listSort = ["ASC", "DESC"];
+
   List<Product> listProduct = [];
+
+  List<Product> listAllProductCate = [];
 
   Processor processor = Processor(productId: "");
   Motherboard motherboard = Motherboard(productId: "");
@@ -43,21 +51,34 @@ class _ChooseDeviceScreenState extends State<ChooseDeviceScreen> {
   @override
   void initState() {
     super.initState();
+    widget.category.brandList!.add(selectedBrand);
     initScreen();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.category.brandList!
+        .removeWhere((element) => element.productBrandId == "");
   }
 
   Future<void> initScreen() async {
     setState(() {
       isLoading = true;
     });
-    if (widget.title.toLowerCase() == "monitor" ||
-        widget.title.toLowerCase() == "psu" ||
-        widget.title.toLowerCase() == "cooler cpu" ||
-        widget.title.toLowerCase() == "fan") {
-      PCComponentAPI.getListProductComponent(widget.title).then((products) {
+    if (widget.category.name!.toLowerCase() == "monitor" ||
+        widget.category.name!.toLowerCase() == "psu" ||
+        widget.category.name!.toLowerCase() == "cooler cpu" ||
+        widget.category.name!.toLowerCase() == "fan") {
+      PCComponentAPI.getListProductComponent(widget.category.name!)
+          .then((products) {
         listProduct = products;
-        if (widget.title.toLowerCase() == "psu") {
+        listAllProductCate = products;
+        if (widget.category.name!.toLowerCase() == "psu") {
           listProduct = listProduct
+              .where((element) => element.power! >= widget.estimatePower)
+              .toList();
+          listAllProductCate = listAllProductCate
               .where((element) => element.power! >= widget.estimatePower)
               .toList();
         }
@@ -69,7 +90,8 @@ class _ChooseDeviceScreenState extends State<ChooseDeviceScreen> {
       });
     } else {
       for (Product p in widget.listSelectedProduct) {
-        if (p.categoryName!.toLowerCase() != widget.title.toLowerCase()) {
+        if (p.categoryName!.toLowerCase() !=
+            widget.category.name!.toLowerCase()) {
           await checkMainComponent(p, "processor");
           await checkMainComponent(p, "motherboard");
           await checkMainComponent(p, "case");
@@ -84,10 +106,11 @@ class _ChooseDeviceScreenState extends State<ChooseDeviceScreen> {
           gpu.productId != "" ||
           ram.productId != "" ||
           storage.productId != "") {
-        PCComponentAPI.getListProductComponentPost(widget.title, processor,
-                motherboard, caseSpec, gpu, ram, storage)
+        PCComponentAPI.getListProductComponentPost(widget.category.name!,
+                processor, motherboard, caseSpec, gpu, ram, storage)
             .then((products) {
           listProduct = products;
+          listAllProductCate = products;
           if (mounted) {
             setState(() {
               isLoading = false;
@@ -99,7 +122,12 @@ class _ChooseDeviceScreenState extends State<ChooseDeviceScreen> {
           listProduct = products
               .where((element) => element.categoryName!
                   .toLowerCase()
-                  .contains(widget.title.toLowerCase()))
+                  .contains(widget.category.name!.toLowerCase()))
+              .toList();
+          listAllProductCate = products
+              .where((element) => element.categoryName!
+                  .toLowerCase()
+                  .contains(widget.category.name!.toLowerCase()))
               .toList();
           if (mounted) {
             setState(() {
@@ -142,7 +170,74 @@ class _ChooseDeviceScreenState extends State<ChooseDeviceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Choose ${widget.title}"),
+        title: Text("Pick ${widget.category.name!}"),
+        actions: [
+          Container(
+            color: const Color(0xfff6f6f6),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.fromLTRB(10, 10, 20, 10),
+            child: DropdownButton<Brand>(
+              value: selectedBrand,
+              icon: const Icon(Icons.arrow_drop_down),
+              elevation: 16,
+              style: const TextStyle(color: kPrimaryColor),
+              onChanged: (Brand? value) {
+                if (value!.productBrandId == "") {
+                  listProduct = listAllProductCate;
+                } else {
+                  listProduct = listAllProductCate
+                      .where((element) => element.brandName!
+                          .toLowerCase()
+                          .contains(value.productBrandName!.toLowerCase()))
+                      .toList();
+                }
+                setState(() {
+                  selectedBrand = value;
+                });
+              },
+              underline: Container(),
+              items: widget.category.brandList!
+                  .map<DropdownMenuItem<Brand>>((Brand value) {
+                return DropdownMenuItem<Brand>(
+                  value: value,
+                  child: Text(value.productBrandName ?? ""),
+                );
+              }).toList(),
+            ),
+          ),
+          Container(
+            color: const Color(0xfff6f6f6),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.fromLTRB(10, 10, 20, 10),
+            child: DropdownButton<String>(
+              value: selectedSort,
+              icon: const Icon(Icons.arrow_drop_down),
+              elevation: 16,
+              style: const TextStyle(color: kPrimaryColor),
+              onChanged: (String? value) {
+                if (value == "ASC") {
+                  listProduct.sort((a, b) =>
+                      int.parse(a.unitPrice!.replaceAll(",", "")).compareTo(
+                          int.parse(b.unitPrice!.replaceAll(",", ""))));
+                } else if (value == "DESC") {
+                  listProduct.sort((a, b) =>
+                      int.parse(b.unitPrice!.replaceAll(",", "")).compareTo(
+                          int.parse(a.unitPrice!.replaceAll(",", ""))));
+                }
+                setState(() {
+                  selectedSort = value ?? "ASC";
+                });
+              },
+              underline: Container(),
+              items: listSort.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -256,7 +351,7 @@ class ChooseDeviceCard extends StatelessWidget {
                   color: kPrimaryColor,
                 ),
                 child: const Text(
-                  "Add To Cart",
+                  "Add Product",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.white,

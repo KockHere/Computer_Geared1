@@ -333,10 +333,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           cartItems: e.value,
                         ),
                       ),
-                      CartContainer(
-                        name: "id&&User Product",
-                        cartItems: listCartItem,
-                      )
+                      listCartItem.isEmpty
+                          ? Container()
+                          : CartContainer(
+                              name: "id&&User Product",
+                              cartItems: listCartItem,
+                            )
                     ],
                   ),
                 ),

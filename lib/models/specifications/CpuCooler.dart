@@ -68,7 +68,7 @@ class CpuCooler {
         fanRpm: json["fan_rpm"],
         noiseLevel: json["noise_level"],
         fanNumber: json["fan_number"],
-        cpuCoolerSize: json["cpu_cooler_size"],
+        cpuCoolerSize: json["cpu_cooler_size"].toString(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -84,7 +84,18 @@ class CpuCooler {
             ? []
             : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
-        "Product Specification Type": productSpecificationType,
+        "product_specification_type": productSpecificationType,
+        "brand": brand,
+        "model": model,
+        "cpu_cooler": cpuCooler,
+        "fan_rpm": fanRpm,
+        "noise_level": noiseLevel,
+        "fan_number": fanNumber,
+        "cpu_cooler_size": cpuCoolerSize,
+      };
+
+  Map<String, dynamic> toJson1() => {
+        //"Product Specification Type": productSpecificationType,
         "Brand": brand,
         "Model": model,
         "CPU Cooler": cpuCooler,

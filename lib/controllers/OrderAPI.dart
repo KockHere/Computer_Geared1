@@ -10,7 +10,7 @@ import 'package:shop_app/models/OrderStatus.dart';
 
 class OrderAPI {
   static Future<List<OrderStatus>> getListOrderStatus() async {
-    List<OrderStatus> listOrderStatus= [];
+    List<OrderStatus> listOrderStatus = [];
     final response = await http.get(
       Uri.parse("${urlApi}user/order-status"),
       headers: <String, String>{
@@ -27,25 +27,28 @@ class OrderAPI {
     return listOrderStatus;
   }
 
-  static Future<List<Orders>> getListOrders() async {
-    List<Orders> listOrders= [];
+  static Future<List<Orders>> getListOrders(int limit) async {
+    List<Orders> listOrders = [];
     final response = await http.get(
-      Uri.parse("${urlApi}auth/user/order"),
+      Uri.parse("${urlApi}auth/user/order?limit=$limit&offset=0"),
       headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
         HttpHeaders.authorizationHeader: user.accessToken ?? "",
       },
     );
     if (response.statusCode == 200) {
-      List<dynamic> bodyJson = json.decode(utf8.decode(response.bodyBytes));
-      for (var element in bodyJson) {
+      Map<String, dynamic> bodyJson =
+          json.decode(utf8.decode(response.bodyBytes));
+      List<dynamic> result = bodyJson["result"];
+      for (var element in result) {
         listOrders.add(Orders.fromJson(element));
       }
     }
     return listOrders;
   }
 
-  static Future<String> createOrders(String paymentId, String addressId, List<String> listCartItemId) async {
+  static Future<String> createOrders(
+      String paymentId, String addressId, List<String> listCartItemId) async {
     String orderId = "";
     List<Map<String, dynamic>> cartItemList = [];
     for (String cartItemId in listCartItemId) {

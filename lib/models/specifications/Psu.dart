@@ -12,7 +12,7 @@ class Psu {
   String? productSpecificationType;
   String? brand;
   String? model;
-  String? formFactor;
+  int? formFactor;
   int? power;
 
   Psu({
@@ -73,7 +73,15 @@ class Psu {
             ? []
             : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
-        "Product Specification Type": productSpecificationType,
+        "product_specification_type": productSpecificationType,
+        "brand": brand,
+        "model": model,
+        "form_factor": formFactor,
+        "power": power,
+      };
+
+  Map<String, dynamic> toJson1() => {
+        //"Product Specification Type": productSpecificationType,
         "Brand": brand,
         "Model": model,
         "Form Factor": formFactor,

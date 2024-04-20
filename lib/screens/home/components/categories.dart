@@ -91,7 +91,11 @@ class CategoryCard extends StatelessWidget {
                     alignment: Alignment.bottomCenter,
                     child: const Icon(Icons.more_horiz),
                   )
-                : Image.network(icon),
+                : Image.network(
+                    icon,
+                    errorBuilder: (context, error, stackTrace) => Image.network(
+                        "https://lh3.googleusercontent.com/icxPo1Rqyjc1XkfEpTq6NJx3p1mFclraPE3mp3uxCUDBoHXuhbq8WMGMiwE3L4czehocmdRCuSyBF9QOU4DQhz30eIjekvNm=rw"),
+                  ),
           ),
           const SizedBox(height: 4),
           Text(text, textAlign: TextAlign.center)

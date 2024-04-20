@@ -9,6 +9,7 @@ class Ram {
   int? discount;
   int? sold;
   String? categoryName;
+  String? productBrandId;
   String? brandName;
   List<String>? imageLinks;
   String? specificationId;
@@ -17,7 +18,7 @@ class Ram {
   String? brand;
   int? warranty;
   String? memory;
-  String? ramType;
+  int? ramType;
   String? casLatency;
   String? dimmType;
   double? voltage;
@@ -31,6 +32,7 @@ class Ram {
     this.discount,
     this.sold,
     this.categoryName,
+    this.productBrandId,
     this.brandName,
     this.imageLinks,
     this.specificationId,
@@ -59,6 +61,7 @@ class Ram {
                 .replaceAll(".", "")),
         sold: json["sold"],
         categoryName: json["category_name"],
+        productBrandId: json["product_brand_id"] ?? "",
         brandName: json["brand_name"],
         imageLinks: json["image_links"] == null ||
                 json["image_links"].isEmpty ||
@@ -89,6 +92,7 @@ class Ram {
 
   Map<String, dynamic> toJson() => {
         "primary_product_id": primaryProductId,
+        "ram_id": productId,
         "name": name,
         "description": description,
         "unit_price": unitPrice,
@@ -96,13 +100,25 @@ class Ram {
         "discount": discount,
         "sold": sold,
         "category_name": categoryName,
+        "product_brand_id": productBrandId,
         "brand_name": brandName,
         "image_links": imageLinks == null
             ? []
             : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
         "product_id": productId,
-        "Product Specification Type": productSpecificationType,
+        "product_specification_type": productSpecificationType,
+        "brand": brand,
+        "warranty": warranty,
+        "memory": memory,
+        "ram_type": ramType,
+        "cas_latency": casLatency,
+        "dimm_type": dimmType,
+        "voltage": voltage,
+      };
+
+  Map<String, dynamic> toJson1() => {
+        //"Product Specification Type": productSpecificationType,
         "Brand": brand,
         //"Warranty": warranty,
         "Memory": memory,

@@ -28,7 +28,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           children: [
-            const ProfilePic(),
+            ProfilePic(),
             Container(
               padding: const EdgeInsets.all(10),
               child: Text(
@@ -60,7 +60,9 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const EditProfileScreen()),
-                      );
+                      ).then((value) {
+                        setState(() {});
+                      });
                     },
                     child: const Icon(
                       Icons.edit,

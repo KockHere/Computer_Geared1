@@ -9,6 +9,7 @@ class Gpu {
   int? discount;
   int? sold;
   String? categoryName;
+  String? productBrandId;
   String? brandName;
   List<String>? imageLinks;
   String? specificationId;
@@ -36,6 +37,7 @@ class Gpu {
     this.discount,
     this.sold,
     this.categoryName,
+    this.productBrandId,
     this.brandName,
     this.imageLinks,
     this.specificationId,
@@ -69,6 +71,7 @@ class Gpu {
                 .replaceAll(".", "")),
         sold: json["sold"],
         categoryName: json["category_name"],
+        productBrandId: json["product_brand_id"] ?? "",
         brandName: json["brand_name"],
         imageLinks: json["image_links"] == null ||
                 json["image_links"].isEmpty ||
@@ -104,6 +107,7 @@ class Gpu {
 
   Map<String, dynamic> toJson() => {
         "primary_product_id": primaryProductId,
+        "gpu_id": productId,
         "name": name,
         "description": description,
         "unit_price": unitPrice,
@@ -111,24 +115,38 @@ class Gpu {
         "discount": discount,
         "sold": sold,
         "category_name": categoryName,
+        "product_brand_id": productBrandId,
         "brand_name": brandName,
         "image_links": imageLinks == null
             ? []
             : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
         "product_id": productId,
-        "Product Specification Type": productSpecificationType,
+        "product_specification_type": productSpecificationType,
+        "brand": brand,
+        "chipset": chipset,
+        "memory": memory,
+        "benchmark": benchmark,
+        "max_power_consumption": maxPowerConsumption,
+        //"Clock Speed": clockSpeed,
+        "base_clock_speed": baseClockSpeed,
+        "length": length,
+        //"Frame_sync": frameSync,
+        "cooler_typer": coolerTyper,
+        "interface": gpuInterface,
+        //"support_api": supportApi,
+      };
+
+  Map<String, dynamic> toJson1() => {
+        //"Product Specification Type": productSpecificationType,
         "Brand": brand,
         "Chipset": chipset,
         "Memory": memory,
         "Benchmark": benchmark,
         "Max Power Consumption": maxPowerConsumption,
-        //"Clock Speed": clockSpeed,
         "Base Clock Speed": baseClockSpeed,
         "Length": length,
-        //"Frame_sync": frameSync,
         "Cooler Type": coolerTyper,
         "Interface": gpuInterface,
-        //"support_api": supportApi,
       };
 }

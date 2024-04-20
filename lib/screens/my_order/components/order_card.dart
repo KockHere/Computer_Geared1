@@ -80,7 +80,7 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${orders.total ?? 0}đ",
+                  "${orders.totalPrice ?? 0}đ",
                   style: const TextStyle(
                       fontWeight: FontWeight.w600, color: kPrimaryColor),
                 ),

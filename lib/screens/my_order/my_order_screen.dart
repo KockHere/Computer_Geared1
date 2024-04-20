@@ -7,6 +7,7 @@ import 'package:shop_app/screens/loading/loading_screen.dart';
 import 'package:shop_app/screens/my_order/components/order_card.dart';
 import 'package:shop_app/screens/order_detail/order_detail_screen.dart';
 import 'package:shop_app/variables.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MyOrderScreen extends StatefulWidget {
   const MyOrderScreen({super.key});
@@ -21,6 +22,11 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
   List<OrderStatus> listOrderStatus = [OrderStatus(statusDetails: "All")];
 
   OrderStatus? selectedOrderStatus;
+
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  int limit = 10;
 
   @override
   void initState() {
@@ -37,7 +43,11 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
         });
       }
     });
-    OrderAPI.getListOrders().then((orders) {
+    getListOrders();
+  }
+
+  void getListOrders() {
+    OrderAPI.getListOrders(limit).then((orders) {
       listAllOrders = orders;
       listOrders = orders;
       if (mounted) {
@@ -58,7 +68,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
             centerTitle: true,
             backgroundColor: Colors.white,
             title: Text(
-              "Đơn hàng",
+              "Order List",
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
@@ -114,20 +124,40 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  ListView.builder(
-                    itemCount: listOrders.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => OrderCard(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const OrderDetailScreen(
-                                  orderStatus: "Complete")),
-                        );
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height - 164,
+                    child: SmartRefresher(
+                      controller: _refreshController,
+                      enablePullDown: true,
+                      enablePullUp: true,
+                      onRefresh: () {
+                        limit = 10;
+                        getListOrders();
+                        _refreshController.refreshCompleted();
                       },
-                      orders: listOrders[index],
+                      onLoading: () {
+                        limit += 10;
+                        getListOrders();
+                        _refreshController.loadComplete();
+                      },
+                      child: SingleChildScrollView(
+                        child: ListView.builder(
+                          itemCount: listOrders.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) => OrderCard(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderDetailScreen(
+                                        orders: listOrders[index])),
+                              );
+                            },
+                            orders: listOrders[index],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

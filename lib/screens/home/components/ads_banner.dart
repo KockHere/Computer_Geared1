@@ -3,10 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 // ignore: must_be_immutable
 class AdsBanner extends StatefulWidget {
-  AdsBanner({
-    Key? key,
-    required this.listAds
-  }) : super(key: key);
+  AdsBanner({Key? key, required this.listAds}) : super(key: key);
 
   List<String> listAds;
 

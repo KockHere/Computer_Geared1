@@ -38,11 +38,28 @@ class BuildPCCard extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                category.description ?? "",
-                style: const TextStyle(fontWeight: FontWeight.w600),
+              Expanded(
+                child: Row(
+                  children: [
+                    Text(
+                      category.description ?? "",
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    if (category.name!.toLowerCase().startsWith(RegExp(
+                        r'motherboard|processor|psu|ram|storage|case|cooler cpu|gpu|fan'))) ...[
+                      const SizedBox(width: 10),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
               cartItem.productId == ""
                   ? GestureDetector(

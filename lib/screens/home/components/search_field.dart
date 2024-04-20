@@ -4,14 +4,17 @@ import '../../../constants.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    required this.onChange,
+  });
+
+  final Function(String) onChange;
 
   @override
   Widget build(BuildContext context) {
     return Form(
       child: TextFormField(
-        onChanged: (value) {},
+        onChanged: onChange,
         decoration: InputDecoration(
           filled: true,
           fillColor: kSecondaryColor.withOpacity(0.1),

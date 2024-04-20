@@ -4,9 +4,13 @@ import 'package:shop_app/controllers/CartAPI.dart';
 import 'package:shop_app/controllers/PCComponentAPI.dart';
 import 'package:shop_app/models/CartItem.dart';
 import 'package:shop_app/models/specifications/Case.dart';
+import 'package:shop_app/models/specifications/CaseCooler.dart';
+import 'package:shop_app/models/specifications/CpuCooler.dart';
 import 'package:shop_app/models/specifications/Gpu.dart';
+import 'package:shop_app/models/specifications/Monitor.dart';
 import 'package:shop_app/models/specifications/Motherboard.dart';
 import 'package:shop_app/models/specifications/Processor.dart';
+import 'package:shop_app/models/specifications/Psu.dart';
 import 'package:shop_app/models/specifications/Ram.dart';
 import 'package:shop_app/models/specifications/Storage.dart';
 import 'package:shop_app/screens/loading/loading_screen.dart';
@@ -45,7 +49,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Ram ram = Ram(productId: "");
   Storage storage = Storage(productId: "");
 
-  String specification = "";
+  CaseCooler caseCooler = CaseCooler(productId: "");
+  CpuCooler cpuCooler = CpuCooler(productId: "");
+  Psu psu = Psu(productId: "");
+  Monitor monitor = Monitor(productId: "");
+
+  Map<String, dynamic> specification = {};
+
+  bool isShowSpec = false;
 
   @override
   void didChangeDependencies() {
@@ -57,64 +68,38 @@ class _DetailsScreenState extends State<DetailsScreen> {
     motherboard = data["motherboard"] ?? Motherboard(productId: "");
     isView = data["isView"] ?? false;
     if (product.productId != null) {
-      if (product.categoryName!
-          .toLowerCase()
-          .contains(RegExp(r'processor|motherboard|case|gpu|ram|storage'))) {
-        setState(() {
-          isLoading = true;
-        });
-        checkMainComponent(product, product.categoryName!.toLowerCase())
-            .then((value) {
-          if (processor.productId != "") {
-            processor.toJson().forEach((key, value) {
-              if (!key.contains(RegExp(
-                  r'primary_product_id|name|description|unit_price|price|discount|sold|image_links|specification_id|product_id'))) {
-                specification += "$key: $value\n";
-              }
-            });
-          } else if (motherboardProduct.productId != "") {
-            motherboardProduct.toJson().forEach((key, value) {
-              if (!key.contains(RegExp(
-                  r'primary_product_id|name|description|unit_price|price|discount|sold|image_links|specification_id|product_id'))) {
-                specification += "$key: $value\n";
-              }
-            });
-          } else if (caseSpec.productId != "") {
-            caseSpec.toJson().forEach((key, value) {
-              if (!key.contains(RegExp(
-                  r'primary_product_id|name|description|unit_price|price|discount|sold|image_links|specification_id|product_id'))) {
-                specification += "$key: $value\n";
-              }
-            });
-          } else if (gpu.productId != "") {
-            gpu.toJson().forEach((key, value) {
-              if (!key.contains(RegExp(
-                  r'primary_product_id|name|description|unit_price|price|discount|sold|image_links|specification_id|product_id'))) {
-                specification += "$key: $value\n";
-              }
-            });
-          } else if (ram.productId != "") {
-            ram.toJson().forEach((key, value) {
-              if (!key.contains(RegExp(
-                  r'primary_product_id|name|description|unit_price|price|discount|sold|image_links|specification_id|product_id'))) {
-                specification += "$key: $value\n";
-              }
-            });
-          } else if (storage.productId != "") {
-            storage.toJson().forEach((key, value) {
-              if (!key.contains(RegExp(
-                  r'primary_product_id|name|description|unit_price|price|discount|sold|image_links|specification_id|product_id'))) {
-                specification += "$key: $value\n";
-              }
-            });
-          }
-          if (mounted) {
-            setState(() {
-              isLoading = false;
-            });
-          }
-        });
-      }
+      setState(() {
+        isLoading = true;
+      });
+      checkMainComponent(product, product.categoryName!.toLowerCase())
+          .then((value) {
+        if (processor.productId != "") {
+          specification = processor.toJson1();
+        } else if (motherboardProduct.productId != "") {
+          specification = motherboardProduct.toJson1();
+        } else if (caseSpec.productId != "") {
+          specification = caseSpec.toJson1();
+        } else if (gpu.productId != "") {
+          specification = gpu.toJson1();
+        } else if (ram.productId != "") {
+          specification = ram.toJson1();
+        } else if (storage.productId != "") {
+          specification = storage.toJson1();
+        } else if (caseCooler.productId != "") {
+          specification = caseCooler.toJson1();
+        } else if (cpuCooler.productId != "") {
+          specification = cpuCooler.toJson1();
+        } else if (psu.productId != "") {
+          specification = psu.toJson1();
+        } else if (monitor.productId != "") {
+          specification = monitor.toJson1();
+        }
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
     }
     setState(() {});
   }
@@ -136,6 +121,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
           ram = Ram.fromJson(data);
         } else if (category == "storage") {
           storage = Storage.fromJson(data);
+        } else if (category == "fan") {
+          caseCooler = CaseCooler.fromJson(data);
+        } else if (category == "cooler cpu") {
+          cpuCooler = CpuCooler.fromJson(data);
+        } else if (category == "psu") {
+          psu = Psu.fromJson(data);
+        } else if (category == "monitor") {
+          monitor = Monitor.fromJson(data);
         }
       }
     }
@@ -212,6 +205,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ProductDescription(
                       product: product,
                       specification: specification,
+                      isShowSpec: isShowSpec,
+                      onTapShowSpec: () {
+                        setState(() {
+                          isShowSpec = !isShowSpec;
+                        });
+                      },
                     ),
                     TopRoundedContainer(
                       color: const Color(0xFFF6F7F9),
@@ -239,7 +238,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               }
                             },
                             onTapPlus: () {
-                              int maxQuantity = 1;
+                              int maxQuantity = 1000;
                               if (motherboard.productId != "") {
                                 if (product.categoryName!
                                     .toLowerCase()
@@ -357,7 +356,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             }
                           }
                         },
-                        child: Text(isBuildPC ? "Add To Cart" : "Add To Cart"),
+                        child: Text(isBuildPC ? "Add Product" : "Add To Cart"),
                       ),
                     ),
                   ),

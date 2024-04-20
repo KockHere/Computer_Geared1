@@ -13,10 +13,12 @@ class HomeHeader extends StatelessWidget {
     super.key,
     required this.numberOfProduct,
     required this.onSetState,
+    required this.onChange,
   });
 
   int numberOfProduct;
   Function() onSetState;
+  Function(String) onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class HomeHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Expanded(child: SearchField()),
+          Expanded(child: SearchField(onChange: onChange)),
           const SizedBox(width: 16),
           IconBtnWithCounter(
             svgSrc: "assets/icons/Cart Icon.svg",

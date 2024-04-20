@@ -121,16 +121,111 @@ class _HomeScreenState extends State<HomeScreen> {
                     //         userCart.productTotal!,
                     //       ),
                     numberOfProduct: listUserCart
-                        .where((element) => element.personalBuildPcId == "")
-                        .toList()
-                        .fold(
-                            0,
-                            (sum, item) =>
-                                sum +
-                                (item.productList!.isEmpty
-                                    ? 0
-                                    : item.productList!.first.quantity!)),
+                                .where((element) =>
+                                    element.personalBuildPcId == "")
+                                .toList()
+                                .fold(
+                                    0,
+                                    (sum, item) =>
+                                        sum +
+                                        (item.productList!.isEmpty
+                                            ? 0
+                                            : item.productList!.first
+                                                .quantity!)) ==
+                            0
+                        ? listUserCart
+                            .where(
+                                (element) => element.personalBuildPcId != null)
+                            .length
+                        : listUserCart
+                            .where((element) => element.personalBuildPcId == "")
+                            .toList()
+                            .fold(
+                                0,
+                                (sum, item) =>
+                                    sum +
+                                    (item.productList!.isEmpty
+                                        ? 0
+                                        : item.productList!.first.quantity!)),
                     onSetState: () {
+                      setState(() {});
+                    },
+                    onChange: (value) {
+                      listProduct = listAllProduct
+                          .where((element) => element.name!
+                              .toLowerCase()
+                              .contains(value.toLowerCase()))
+                          .toList();
+                      listProductProcessor = listAllProduct
+                          .where((element) =>
+                              element.categoryName!
+                                  .toLowerCase()
+                                  .contains("processor") &&
+                              element.name!
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                          .take(10)
+                          .toList();
+                      listProductMotherboard = listAllProduct
+                          .where((element) =>
+                              element.categoryName!
+                                  .toLowerCase()
+                                  .contains("motherboard") &&
+                              element.name!
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                          .take(10)
+                          .toList();
+                      listProductCase = listAllProduct
+                          .where((element) =>
+                              element.categoryName!
+                                  .toLowerCase()
+                                  .contains("case") &&
+                              element.name!
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                          .take(10)
+                          .toList();
+                      listProductGPU = listAllProduct
+                          .where((element) =>
+                              element.categoryName!
+                                  .toLowerCase()
+                                  .contains("gpu") &&
+                              element.name!
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                          .take(10)
+                          .toList();
+                      listProductRam = listAllProduct
+                          .where((element) =>
+                              element.categoryName!
+                                  .toLowerCase()
+                                  .contains("ram") &&
+                              element.name!
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                          .take(10)
+                          .toList();
+                      listProductStorage = listAllProduct
+                          .where((element) =>
+                              element.categoryName!
+                                  .toLowerCase()
+                                  .contains("storage") &&
+                              element.name!
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                          .take(10)
+                          .toList();
+                      listProductMonitor = listAllProduct
+                          .where((element) =>
+                              element.categoryName!
+                                  .toLowerCase()
+                                  .contains("monitor") &&
+                              element.name!
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                          .take(10)
+                          .toList();
                       setState(() {});
                     },
                   ),

@@ -32,21 +32,24 @@ class ColorDots extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: onTap1,
-            child: ColorDot(
-              color: Colors.white,
-              isSelected: selectedColor == 1,
-            ),
+          Expanded(
+            child: Container(),
           ),
-          GestureDetector(
-            onTap: onTap2,
-            child: ColorDot(
-              color: Colors.black,
-              isSelected: selectedColor == 2,
-            ),
-          ),
-          const Spacer(),
+          // GestureDetector(
+          //   onTap: onTap1,
+          //   child: ColorDot(
+          //     color: Colors.white,
+          //     isSelected: selectedColor == 1,
+          //   ),
+          // ),
+          // GestureDetector(
+          //   onTap: onTap2,
+          //   child: ColorDot(
+          //     color: Colors.black,
+          //     isSelected: selectedColor == 2,
+          //   ),
+          // ),
+          // const Spacer(),
           if (isShowQuantity) ...[
             RoundedIconBtn(
               icon: Icons.remove,

@@ -24,10 +24,11 @@ import 'package:shop_app/models/specifications/Ram.dart';
 import 'package:shop_app/models/specifications/Storage.dart';
 import 'package:shop_app/models/specifications/UserPC.dart';
 import 'package:shop_app/screens/build_pc/components/build_pc_cart.dart';
+import 'package:shop_app/screens/build_pc/components/purpose_card.dart';
 import 'package:shop_app/screens/choose_device/choose_device_screen.dart';
 import 'package:shop_app/screens/details/details_screen.dart';
+import 'package:shop_app/screens/init_screen.dart';
 import 'package:shop_app/screens/loading/loading_screen.dart';
-import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/show_dialog.dart';
 import 'package:shop_app/variables.dart';
 
@@ -50,7 +51,7 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
   List<CartItem> listSelectedCartItem = [];
   int totalPage = 0;
 
-  double selectedPrice = 5;
+  int selectedPrice = 20;
 
   AutoGen autoGen = AutoGen(preBuildId: "");
 
@@ -61,6 +62,8 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
 
   Gpu gpu = Gpu(productId: "", maxPowerConsumption: 0);
   Processor processor = Processor(productId: "", power: 0);
+
+  List<String> selectedPurpose = [];
 
   @override
   void initState() {
@@ -189,8 +192,15 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
       removeListAutoGen("ram");
       removeListAutoGen("storage");
     }
-    AutoGenAPI.getListProductAutoGen().then((data) {
+    AutoGenAPI.getListProductAutoGen(selectedPurpose, selectedPrice * 1000000)
+        .then((data) {
       autoGen = data;
+      listSelectedProduct.removeWhere((element) => element.categoryName!
+          .toLowerCase()
+          .contains(RegExp(r'processor|motherboard|case|gpu|ram|storage')));
+      listSelectedCartItem.removeWhere((element) => element.categoryName!
+          .toLowerCase()
+          .contains(RegExp(r'processor|motherboard|case|gpu|ram|storage')));
       addListAutoGen(autoGen.motherboardSpecification!.toJson());
       addListAutoGen(autoGen.processorSpecification!.toJson());
       addListAutoGen(autoGen.caseSpecification!.toJson());
@@ -428,6 +438,56 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
     );
   }
 
+  bool checkRequiredPart() {
+    bool motherboardExist = false;
+    bool processorExist = false;
+    bool psuExist = false;
+    bool ramExist = false;
+    bool storageExist = false;
+    bool caseExist = false;
+    bool gpuExist = false;
+    bool coolerCpuExist = false;
+    bool fanExist = false;
+    for (CartItem element in listSelectedCartItem) {
+      if (element.categoryName!.toLowerCase().contains("motherboard")) {
+        motherboardExist = true;
+      }
+      if (element.categoryName!.toLowerCase().contains("processor")) {
+        processorExist = true;
+      }
+      if (element.categoryName!.toLowerCase().contains("psu")) {
+        psuExist = true;
+      }
+      if (element.categoryName!.toLowerCase().contains("ram")) {
+        ramExist = true;
+      }
+      if (element.categoryName!.toLowerCase().contains("storage")) {
+        storageExist = true;
+      }
+      if (element.categoryName!.toLowerCase().contains("case")) {
+        caseExist = true;
+      }
+      if (element.categoryName!.toLowerCase().contains("gpu")) {
+        gpuExist = true;
+      }
+      if (element.categoryName!.toLowerCase().contains("cooler cpu")) {
+        coolerCpuExist = true;
+      }
+      if (element.categoryName!.toLowerCase().contains("fan")) {
+        fanExist = true;
+      }
+    }
+    return motherboardExist &&
+        processorExist &&
+        psuExist &&
+        ramExist &&
+        storageExist &&
+        caseExist &&
+        gpuExist &&
+        coolerCpuExist &&
+        fanExist;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -491,7 +551,7 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChooseDeviceScreen(
-                                  title: listIndexCategory[index].name ?? "",
+                                  category: listIndexCategory[index],
                                   listSelectedProduct: listSelectedProduct,
                                   estimatePower: totalPower,
                                 ),
@@ -527,7 +587,7 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChooseDeviceScreen(
-                                  title: listIndexCategory[index].name ?? "",
+                                  category: listIndexCategory[index],
                                   listSelectedProduct: listSelectedProduct,
                                   estimatePower: totalPower,
                                 ),
@@ -696,6 +756,56 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const Text("Purpose"),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                PurposeCard(
+                                  isCheck: selectedPurpose.contains("GAMING"),
+                                  purposeText: "GAMING",
+                                  onTap: () {
+                                    if (selectedPurpose.contains("GAMING")) {
+                                      selectedPurpose.removeWhere(
+                                          (element) => element == "GAMING");
+                                    } else {
+                                      selectedPurpose.add("GAMING");
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                                PurposeCard(
+                                  isCheck: selectedPurpose.contains("OFFICE"),
+                                  purposeText: "OFFICE",
+                                  onTap: () {
+                                    if (selectedPurpose.contains("OFFICE")) {
+                                      selectedPurpose.removeWhere(
+                                          (element) => element == "OFFICE");
+                                    } else {
+                                      selectedPurpose.add("OFFICE");
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                                PurposeCard(
+                                  isCheck: selectedPurpose.contains("CUSTOM"),
+                                  purposeText: "CUSTOM",
+                                  onTap: () {
+                                    if (selectedPurpose.contains("CUSTOM")) {
+                                      selectedPurpose.removeWhere(
+                                          (element) => element == "CUSTOM");
+                                    } else {
+                                      selectedPurpose.add("CUSTOM");
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 40),
                           const Text("Price Range"),
                           Center(
                             child: Text(
@@ -704,15 +814,15 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                             ),
                           ),
                           Slider(
-                            value: selectedPrice,
+                            value: selectedPrice.toDouble(),
                             onChanged: (value) {
                               setState(() {
-                                selectedPrice = value;
+                                selectedPrice = value.toInt();
                               });
                             },
-                            min: 5,
+                            min: 20,
                             max: 100,
-                            divisions: 19,
+                            divisions: 16,
                             activeColor: kPrimaryColor,
                             label: "${selectedPrice.toInt()},000,000đ",
                           ),
@@ -841,97 +951,8 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                       onTap: () {
                         if (indexCategory == totalPage - 1) {
                           if (listSelectedCartItem.isNotEmpty) {
-                            if (isChange) {
-                              _showDialogSave().then((value) {
-                                setState(() {
-                                  isLoading = true;
-                                });
-                                if (user.userId == "") {
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                  Navigator.pushNamed(
-                                      context, SignInScreen.routeName);
-
-                                  // userCart.productList!
-                                  //     .addAll(listSelectedCartItem);
-                                  // int quantitySelectedCartItem = 0;
-                                  // for (CartItem element
-                                  //     in listSelectedCartItem) {
-                                  //   quantitySelectedCartItem +=
-                                  //       element.quantity ?? 0;
-                                  // }
-                                  // userCart.productTotal =
-                                  //     (int.parse(userCart.productTotal!) +
-                                  //             quantitySelectedCartItem)
-                                  //         .toString();
-                                  // listSelectedProduct = [];
-                                  // listSelectedCartItem = [];
-                                  // prefs.then((dataPrefs) {
-                                  //   dataPrefs.setString("USER_CART",
-                                  //       jsonEncode(userCart.toJson()));
-                                  //   updatePrice();
-                                  //   updateTotalPower().then((value) {
-                                  //     if (mounted) {
-                                  //       setState(() {
-                                  //         isLoading = false;
-                                  //       });
-                                  //     }
-                                  //   });
-                                  //   showDialogAddToCartSuccess(context);
-                                  // });
-                                } else {
-                                  CartAPI.addCartItemBuildPc(
-                                          widget.userPC.userPcBuildId ?? "")
-                                      .then((value) {
-                                    CartAPI.getUserCart().then((value) {
-                                      if (mounted) {
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                        showDialogAddToCartSuccess(context);
-                                      }
-                                    });
-                                  });
-                                }
-                              });
-                            } else {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              if (user.userId == "") {
-                                setState(() {
-                                  isLoading = false;
-                                });
-                                Navigator.pushNamed(
-                                    context, SignInScreen.routeName);
-                                // userCart.productList!
-                                //     .addAll(listSelectedCartItem);
-                                // int quantitySelectedCartItem = 0;
-                                // for (CartItem element in listSelectedCartItem) {
-                                //   quantitySelectedCartItem +=
-                                //       element.quantity ?? 0;
-                                // }
-                                // userCart.productTotal =
-                                //     (int.parse(userCart.productTotal!) +
-                                //             quantitySelectedCartItem)
-                                //         .toString();
-                                // listSelectedProduct = [];
-                                // listSelectedCartItem = [];
-                                // prefs.then((dataPrefs) {
-                                //   dataPrefs.setString("USER_CART",
-                                //       jsonEncode(userCart.toJson()));
-                                //   updatePrice();
-                                //   updateTotalPower().then((value) {
-                                //     if (mounted) {
-                                //       setState(() {
-                                //         isLoading = false;
-                                //       });
-                                //     }
-                                //   });
-                                //   showDialogAddToCartSuccess(context);
-                                // });
-                              } else {
+                            if (checkRequiredPart()) {
+                              saveUserPC().then((value) {
                                 CartAPI.addCartItemBuildPc(
                                         widget.userPC.userPcBuildId ?? "")
                                     .then((value) {
@@ -940,11 +961,22 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                                       setState(() {
                                         isLoading = false;
                                       });
-                                      showDialogAddToCartSuccess(context);
+                                      showDialogAddToCartSuccess(context)
+                                          .then((value) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const InitScreen(initIndex: 0),
+                                          ),
+                                        );
+                                      });
                                     }
                                   });
                                 });
-                              }
+                              });
+                            } else {
+                              showDialogRequiredPart(context);
                             }
                           }
                         } else {

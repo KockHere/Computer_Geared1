@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/models/CartItem.dart';
+import 'package:shop_app/models/Orders.dart';
 import 'package:shop_app/screens/order_detail/components/order_detail_card.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   const OrderDetailScreen({
-    Key? key,
-    required this.orderStatus,
-  }) : super(key: key);
+    super.key,
+    required this.orders,
+  });
 
-  final String orderStatus;
+  final Orders orders;
 
   @override
   State<OrderDetailScreen> createState() => _OrderDetailScreenState();
@@ -72,19 +72,19 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: widget.orderStatus == "Complete"
+                      color: widget.orders.statusDetail == "Delivered"
                           ? Colors.green.withOpacity(0.3)
-                          : widget.orderStatus == "Cancel"
+                          : widget.orders.statusDetail == "Canceled"
                               ? Colors.red.withOpacity(0.3)
                               : Colors.blue.withOpacity(0.3),
                     ),
                     child: Text(
-                      widget.orderStatus,
+                      widget.orders.statusDetail ?? "",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        color: widget.orderStatus == "Complete"
+                        color: widget.orders.statusDetail == "Delivered"
                             ? Colors.green
-                            : widget.orderStatus == "Cancel"
+                            : widget.orders.statusDetail == "Canceled"
                                 ? Colors.red
                                 : Colors.blue,
                       ),
@@ -93,8 +93,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              // OrderDetailCard(cartItem: demoCarts[0]),
-              // OrderDetailCard(cartItem: demoCarts[1]),
+              ListView.builder(
+                  itemCount: widget.orders.orderDetails!.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => OrderDetailCard(
+                      orderDetail: widget.orders.orderDetails![index])),
               const SizedBox(height: 20),
               Container(
                 width: double.infinity,
@@ -105,26 +109,41 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.credit_card,
-                              size: 26, color: kPrimaryColor),
-                          SizedBox(width: 8),
-                          Text(
-                            "Payment Info",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          const Row(
+                            children: [
+                              Icon(Icons.credit_card,
+                                  size: 26, color: kPrimaryColor),
+                              SizedBox(width: 8),
+                              Text(
+                                "Payment Info",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(20),
                             ),
+                            child: Text(widget.orders.paymentMethod ?? "",
+                                style: const TextStyle(color: Colors.white)),
                           ),
                         ],
                       ),
                       const SizedBox(height: 6),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Product's Price:",
                             style: TextStyle(
                               color: Colors.black,
@@ -132,8 +151,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             ),
                           ),
                           Text(
-                            "500.000đ",
-                            style: TextStyle(
+                            "${widget.orders.totalPrice ?? 0}đ",
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -142,10 +161,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         ],
                       ),
                       const SizedBox(height: 6),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Delivery Fee:",
                             style: TextStyle(
                               color: Colors.black,
@@ -153,8 +172,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             ),
                           ),
                           Text(
-                            "Free",
-                            style: TextStyle(
+                            widget.orders.shippingFee ?? "Free",
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -168,10 +187,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         color: Colors.grey.withOpacity(0.5),
                       ),
                       const SizedBox(height: 6),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Total Price:",
                             style: TextStyle(
                               color: Colors.black,
@@ -179,8 +198,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             ),
                           ),
                           Text(
-                            "500.000đ",
-                            style: TextStyle(
+                            "${widget.orders.totalPrice ?? 0}đ",
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -189,10 +208,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         ],
                       ),
                       const SizedBox(height: 6),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Total Payment:",
                             style: TextStyle(
                               color: Colors.black,
@@ -200,8 +219,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             ),
                           ),
                           Text(
-                            "500.000đ",
-                            style: TextStyle(
+                            "${widget.orders.totalPrice ?? 0}đ",
+                            style: const TextStyle(
                               color: Colors.green,
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -220,10 +239,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 color: Colors.white,
                 child: Container(
                   color: Colors.transparent,
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Icon(Icons.person, size: 26, color: kPrimaryColor),
                           SizedBox(width: 8),
@@ -237,58 +256,32 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       Row(
                         children: [
-                          Icon(Icons.person_outline),
-                          SizedBox(width: 8),
+                          const Icon(Icons.person_outline),
+                          const SizedBox(width: 8),
                           Text(
-                            "Nguyen Manh Cuong",
-                            style: TextStyle(
+                            widget.orders.recipientName ?? "",
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 15,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       Row(
                         children: [
-                          Icon(Icons.phone_outlined),
-                          SizedBox(width: 8),
-                          Text(
-                            "0987654321",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Icon(Icons.location_on_outlined),
-                          SizedBox(width: 8),
-                          Text(
-                            "123 abc, ward, district, city",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Icon(Icons.edit_note_outlined),
-                          SizedBox(width: 8),
-                          Text(
-                            "Near FPT University",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
+                          const Icon(Icons.location_on_outlined),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              "${widget.orders.streetAddress ?? ""}, ${widget.orders.city ?? ""}",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ],
@@ -309,10 +302,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.contact_phone_outlined, size: 26, color: kPrimaryColor),
+                          Icon(Icons.contact_phone_outlined,
+                              size: 26, color: kPrimaryColor),
                           SizedBox(width: 8),
                           Text(
-                            "Contact",
+                            "Contact Us",
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
@@ -342,10 +336,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               Text(
                                 "0987654321",
                                 style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold
-                                ),
+                                    color: kPrimaryColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -361,7 +354,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Address:",
+                                "Store's Address:",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 15,
@@ -369,12 +362,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               ),
                               SizedBox(height: 5),
                               Text(
-                                "123 abc, ward, district, city",
+                                "967/24, Ward 14, Go Vap dist, HCM City",
                                 style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold
-                                ),
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
