@@ -1,41 +1,33 @@
 // ignore_for_file: file_names
-
-import 'package:shop_app/models/specifications/Case.dart';
-import 'package:shop_app/models/specifications/CaseCooler.dart';
-import 'package:shop_app/models/specifications/CpuCooler.dart';
-import 'package:shop_app/models/specifications/Gpu.dart';
-import 'package:shop_app/models/specifications/Monitor.dart';
-import 'package:shop_app/models/specifications/Motherboard.dart';
-import 'package:shop_app/models/specifications/Processor.dart';
-import 'package:shop_app/models/specifications/Psu.dart';
-import 'package:shop_app/models/specifications/Ram.dart';
-import 'package:shop_app/models/specifications/Storage.dart';
+import 'package:shop_app/models/Product.dart';
 
 class UserPC {
   String? userPcBuildId;
   String? profileName;
   String? motherboardId;
-  Motherboard? motherboardSpecification;
+  Product? motherboardSpecification;
   String? processorId;
-  Processor? processorSpecification;
+  Product? processorSpecification;
   String? caseId;
-  Case? caseSpecification;
+  Product? caseSpecification;
   String? gpuId;
-  Gpu? gpuSpecification;
+  Product? gpuSpecification;
   String? ramId;
-  Ram? ramSpecification;
+  Product? ramSpecification;
   String? storageId;
-  Storage? storageSpecification;
+  Product? storageSpecification;
   String? cpuCoolerId;
-  CpuCooler? cpuCoolerSpecification;
+  Product? cpuCoolerSpecification;
   String? caseCoolerId;
-  CaseCooler? caseCoolerSpecification;
+  Product? caseCoolerSpecification;
   String? psuId;
-  Psu? psuSpecification;
+  Product? psuSpecification;
   String? monitorId;
-  Monitor? monitorSpecification;
+  Product? monitorSpecification;
   int? ramQuantity;
   int? storageQuantity;
+  int? totalPrice;
+  String? purposeName;
 
   UserPC({
     this.userPcBuildId,
@@ -62,6 +54,8 @@ class UserPC {
     this.monitorSpecification,
     this.ramQuantity,
     this.storageQuantity,
+    this.totalPrice,
+    this.purposeName,
   });
 
   factory UserPC.fromJson(Map<String, dynamic> json) => UserPC(
@@ -70,43 +64,47 @@ class UserPC {
         motherboardId: json["motherboard_id"],
         motherboardSpecification: json["motherboard_specification"] == null
             ? null
-            : Motherboard.fromJson(json["motherboard_specification"]),
+            : Product.fromJson(json["motherboard_specification"]),
         processorId: json["processor_id"],
         processorSpecification: json["processor_specification"] == null
             ? null
-            : Processor.fromJson(json["processor_specification"]),
+            : Product.fromJson(json["processor_specification"]),
         caseId: json["case_id"],
         caseSpecification: json["case_specification"] == null
             ? null
-            : Case.fromJson(json["case_specification"]),
+            : Product.fromJson(json["case_specification"]),
         gpuId: json["gpu_id"],
         gpuSpecification: json["gpu_specification"] == null
             ? null
-            : Gpu.fromJson(json["gpu_specification"]),
+            : Product.fromJson(json["gpu_specification"]),
         ramId: json["ram_id"],
         ramSpecification: json["ram_specification"] == null
             ? null
-            : Ram.fromJson(json["ram_specification"]),
+            : Product.fromJson(json["ram_specification"]),
         storageId: json["storage_id"],
         storageSpecification: json["storage_specification"] == null
             ? null
-            : Storage.fromJson(json["storage_specification"]),
+            : Product.fromJson(json["storage_specification"]),
         cpuCoolerId: json["cpu_cooler_id"],
         cpuCoolerSpecification: json["cpu_cooler"] == null
             ? null
-            : CpuCooler.fromJson(json["cpu_cooler"]),
+            : Product.fromJson(json["cpu_cooler"]),
         caseCoolerId: json["case_cooler_id"],
         caseCoolerSpecification: json["case_cooler"] == null
             ? null
-            : CaseCooler.fromJson(json["case_cooler"]),
+            : Product.fromJson(json["case_cooler"]),
         psuId: json["psu_id"],
         psuSpecification:
-            json["psu"] == null ? null : Psu.fromJson(json["psu"]),
+            json["psu"] == null ? null : Product.fromJson(json["psu"]),
         monitorId: json["monitor_id"],
         monitorSpecification:
-            json["monitor"] == null ? null : Monitor.fromJson(json["monitor"]),
+            json["monitor"] == null ? null : Product.fromJson(json["monitor"]),
         ramQuantity: json["ram_quantity"] ?? 0,
         storageQuantity: json["storage_quantity"] ?? 0,
+        totalPrice: json["total_price"] == null
+            ? 0
+            : int.parse(json["total_price"].toString().replaceAll(".00", "")),
+        purposeName: json["purpose_name"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -134,5 +132,6 @@ class UserPC {
         "monitor": monitorSpecification?.toJson(),
         "ram_quantity": ramQuantity ?? 0,
         "storage_quantity": storageQuantity ?? 0,
+        "purpose_id": 3,
       };
 }

@@ -9,7 +9,7 @@ import 'package:shop_app/models/Payment.dart';
 
 class PaymentAPI {
   static Future<List<Payment>> getListPayment() async {
-    List<Payment> listPayment= [];
+    List<Payment> listPayment = [];
     final response = await http.get(
       Uri.parse("${urlApi}payment"),
       headers: <String, String>{

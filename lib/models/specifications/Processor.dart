@@ -1,165 +1,88 @@
 // ignore_for_file: file_names
 
 class Processor {
-  String? primaryProductId;
-  String? name;
-  dynamic description;
-  int? unitPrice;
-  String? price;
-  int? discount;
-  int? sold;
-  String? categoryName;
-  String? productBrandId;
-  String? brandName;
-  List<String>? imageLinks;
   String? specificationId;
   String? productId;
-  String? productSpecificationType;
-  String? brand;
-  int? model;
-  String? socket;
+  String? model;
   String? microArchitecture;
-  int? coreQuantity;
-  int? threadsQuantity;
-  double? clockSpeed;
-  double? boostSpeedMax;
+  String? clockSpeed;
+  String? boostSpeedMax;
   int? cache;
-  int? memorySupport;
-  dynamic eccMemory;
-  String? channelArchitecture;
+  String? memorySupport;
   int? power;
-  String? graphicChipset;
-  String? chipset;
+  String? id;
+  String? processorChipset;
+  DateTime? createdAt;
+  int? processorSocket;
+  String? label;
 
   Processor({
-    this.primaryProductId,
-    this.name,
-    this.description,
-    this.unitPrice,
-    this.price,
-    this.discount,
-    this.sold,
-    this.categoryName,
-    this.productBrandId,
-    this.brandName,
-    this.imageLinks,
     this.specificationId,
     this.productId,
-    this.productSpecificationType,
-    this.brand,
     this.model,
-    this.socket,
     this.microArchitecture,
-    this.coreQuantity,
-    this.threadsQuantity,
     this.clockSpeed,
     this.boostSpeedMax,
     this.cache,
     this.memorySupport,
-    this.eccMemory,
-    this.channelArchitecture,
     this.power,
-    this.graphicChipset,
-    this.chipset,
+    this.id,
+    this.processorChipset,
+    this.createdAt,
+    this.processorSocket,
+    this.label,
   });
 
   factory Processor.fromJson(Map<String, dynamic> json) => Processor(
-        primaryProductId: json["primary_product_id"],
-        name: json["name"],
-        description: json["description"],
-        unitPrice: int.parse(json["unit_price"].toString().replaceAll(",", "")),
-        price: json["price"],
-        discount: json["discount"] == null
-            ? 0
-            : int.parse(json["discount"]
-                .toString()
-                .replaceAll(",", "")
-                .replaceAll(".", "")),
-        sold: json["sold"],
-        categoryName: json["category_name"],
-        productBrandId: json["product_brand_id"] ?? "",
-        brandName: json["brand_name"],
-        imageLinks: json["image_links"] == null ||
-                json["image_links"].isEmpty ||
-                json["image_links"][0] == null
-            ? []
-            : List<String>.from(json["image_links"]!.map((x) => x)),
-        specificationId: json["specification_id"],
-        productId: json["product_id"],
-        productSpecificationType: json["product_specification_type"],
-        brand: json["brand"],
+        specificationId: json["specification_id"] ?? "",
+        productId: json["product_id"] ?? "",
         model: json["model"],
-        socket: json["socket"],
         microArchitecture: json["micro_architecture"],
-        coreQuantity: json["core_quantity"],
-        threadsQuantity: json["threads_quantity"],
-        clockSpeed: json["discount"] == null
-            ? 0
-            : double.parse(json["discount"]
-                .toString()
-                .replaceAll(",", "")
-                .replaceAll(".", "")),
-        boostSpeedMax: json["boost_speed_max"] == null
-            ? 0
-            : double.parse(json["boost_speed_max"].toString()),
+        clockSpeed: json["clock_speed"],
+        boostSpeedMax: json["boost_speed_max"],
         cache: json["cache"],
         memorySupport: json["memory_support"],
-        eccMemory: json["ecc_memory"],
-        channelArchitecture: json["channel_architecture"],
         power: json["power"],
-        graphicChipset: json["graphic_chipset"],
-        chipset: json["chipset"],
+        id: json["id"],
+        processorChipset: json["processor_chipset"],
+        createdAt: json["created_at"] == null
+            ? DateTime.now()
+            : DateTime.parse(json["created_at"]),
+        processorSocket: json["processor_socket"],
+        label: json["label"],
       );
 
   Map<String, dynamic> toJson() => {
-        "primary_product_id": primaryProductId,
-        "processor_id": productId,
-        "name": name,
-        "description": description,
-        "unit_price": unitPrice,
-        "price": price,
-        "discount": discount,
-        "sold": sold,
-        "category_name": categoryName,
-        "product_brand_id": productBrandId,
-        "brand_name": brandName,
-        "image_links": imageLinks == null
-            ? []
-            : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
         "product_id": productId,
-        "product_specification_type": productSpecificationType,
-        "brand": brand,
         "model": model,
-        "socket": socket,
         "micro_architecture": microArchitecture,
-        "core_quantity": coreQuantity,
-        "threads_quantity": threadsQuantity,
-        "clock_speed": clockSpeed, //lay nham thanh discount
+        "clock_speed": clockSpeed,
         "boost_speed_max": boostSpeedMax,
         "cache": cache,
         "memory_support": memorySupport,
-        //"ecc_memory": eccMemory,
-        "channel_architecture": channelArchitecture,
         "power": power,
-        //"Graphic Chipset": graphicChipset,
-        "chipset": chipset,
+        "id": id,
+        "processor_chipset": processorChipset,
+        "created_at": createdAt?.toIso8601String(),
+        "processor_socket": processorSocket,
+        "label": label,
       };
 
   Map<String, dynamic> toJson1() => {
-        //"Product Specification Type": productSpecificationType,
-        "Brand": brand,
         "Model": model,
-        "Socket": socket,
         "Micro Architecture": microArchitecture,
-        "Core Quantity": coreQuantity,
-        "Threads Quantity": threadsQuantity,
         "Clock Speed": clockSpeed,
         "Boost Speed Max": boostSpeedMax,
         "Cache": cache,
         "Memory Support": memorySupport,
-        "Channel Architecture": channelArchitecture,
         "Power": power,
-        "Chipset": chipset,
+        //"Id": id,
+        "Processor Chipset": processorChipset,
+        //"Created At": createdAt?.toIso8601String(),
+        "Processor Socket": processorSocket,
+        "Label": label,
       };
+  Map<String, dynamic> toJson2() =>
+      {"processorId": productId == "" ? null : productId};
 }

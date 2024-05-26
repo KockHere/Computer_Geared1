@@ -19,19 +19,15 @@ class CartAPI {
       },
     );
     if (response.statusCode == 200) {
-      try {
-        List<dynamic> bodyJson = json.decode(utf8.decode(response.bodyBytes));
-        listUserCart = [];
-        for (var element in bodyJson) {
-          listCart.add(Cart.fromJson(element));
-          listUserCart.add(Cart.fromJson(element));
-        }
-        // prefs.then((dataPrefs) {
-        //   dataPrefs.setString("USER_CART", jsonEncode(userCart.toJson()));
-        // });
-      } catch (ex) {
-        listCart = [];
+      List<dynamic> bodyJson = json.decode(utf8.decode(response.bodyBytes));
+      listUserCart = [];
+      for (var element in bodyJson) {
+        listCart.add(Cart.fromJson(element));
+        listUserCart.add(Cart.fromJson(element));
       }
+      // prefs.then((dataPrefs) {
+      //   dataPrefs.setString("USER_CART", jsonEncode(userCart.toJson()));
+      // });
     }
     return listCart;
   }

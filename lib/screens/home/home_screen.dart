@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/controllers/CartAPI.dart';
 import 'package:shop_app/controllers/CategoryAPI.dart';
 import 'package:shop_app/controllers/ProductAPI.dart';
+import 'package:shop_app/controllers/CartAPI.dart';
 
 import 'package:shop_app/models/Category.dart';
 import 'package:shop_app/models/Product.dart';
@@ -244,7 +244,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductsScreen(
-                              title: "CPU",
+                              category: listCategory.firstWhere((element) =>
+                                  element.name!
+                                      .toLowerCase()
+                                      .contains("processor")),
                               products: listAllProduct
                                   .where((element) => element.categoryName!
                                       .toLowerCase()
@@ -271,7 +274,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductsScreen(
-                              title: "Motherboard",
+                              category: listCategory.firstWhere((element) =>
+                                  element.name!
+                                      .toLowerCase()
+                                      .contains("motherboard")),
                               products: listAllProduct
                                   .where((element) => element.categoryName!
                                       .toLowerCase()
@@ -298,7 +304,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductsScreen(
-                              title: "Case",
+                              category: listCategory.firstWhere((element) =>
+                                  element.name!.toLowerCase().contains("case")),
                               products: listAllProduct
                                   .where((element) => element.categoryName!
                                       .toLowerCase()
@@ -325,7 +332,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductsScreen(
-                              title: "GPU",
+                              category: listCategory.firstWhere((element) =>
+                                  element.name!.toLowerCase().contains("gpu")),
                               products: listAllProduct
                                   .where((element) => element.categoryName!
                                       .toLowerCase()
@@ -352,7 +360,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductsScreen(
-                              title: "Ram",
+                              category: listCategory.firstWhere((element) =>
+                                  element.name!.toLowerCase().contains("ram")),
                               products: listAllProduct
                                   .where((element) => element.categoryName!
                                       .toLowerCase()
@@ -379,7 +388,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductsScreen(
-                              title: "Storage",
+                              category: listCategory.firstWhere((element) =>
+                                  element.name!
+                                      .toLowerCase()
+                                      .contains("storage")),
                               products: listAllProduct
                                   .where((element) => element.categoryName!
                                       .toLowerCase()
@@ -406,7 +418,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductsScreen(
-                              title: "Monitor",
+                              category: listCategory.firstWhere((element) =>
+                                  element.name!
+                                      .toLowerCase()
+                                      .contains("monitor")),
                               products: listAllProduct
                                   .where((element) => element.categoryName!
                                       .toLowerCase()

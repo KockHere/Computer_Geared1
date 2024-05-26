@@ -30,8 +30,10 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
     for (Cart element in listUserCart) {
-      if (element.personalBuildPcId == "" && element.productList!.isNotEmpty) {
-        listCartItem.add(element.productList!.first);
+      if (element.personalBuildPcId == "" || element.buildPcDetail == null) {
+        if (element.productList!.isNotEmpty) {
+          listCartItem.add(element.productList!.first);
+        }
       } else if (element.personalBuildPcId != "") {
         List<CartItem> listCartItemBuildPc = [];
         if (element.buildPcDetail!.motherboardSpecification != null) {

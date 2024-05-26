@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/specifications/UserPC.dart';
-import 'package:shop_app/screens/list_build_pc/components/pc_build_image.dart';
+import 'package:shop_app/screens/list_build_pc_recommend/components/pc_build_image.dart';
 
 class PcBuildCard extends StatelessWidget {
   const PcBuildCard({
@@ -10,16 +10,14 @@ class PcBuildCard extends StatelessWidget {
     required this.onTap,
     required this.totalPrice,
     required this.description,
-    required this.onTapUpdate,
-    required this.onTapDelete,
+    required this.onTapSelect,
   });
 
   final UserPC userPC;
   final Function() onTap;
   final int totalPrice;
   final String description;
-  final Function() onTapUpdate;
-  final Function() onTapDelete;
+  final Function() onTapSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -40,32 +38,30 @@ class PcBuildCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          userPC.profileName ?? "",
-                          style: const TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: onTapUpdate,
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    userPC.profileName ?? "",
+                    style: const TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 12),
                 GestureDetector(
-                  onTap: onTapDelete,
-                  child: const Icon(Icons.clear),
+                  onTap: onTapSelect,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: kPrimaryColor,
+                    ),
+                    child: const Text(
+                      "Select",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ),
               ],
             ),

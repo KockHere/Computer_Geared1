@@ -70,18 +70,35 @@ class _ChooseDeviceScreenState extends State<ChooseDeviceScreen> {
         widget.category.name!.toLowerCase() == "psu" ||
         widget.category.name!.toLowerCase() == "cooler cpu" ||
         widget.category.name!.toLowerCase() == "fan") {
-      PCComponentAPI.getListProductComponent(widget.category.name!)
-          .then((products) {
-        listProduct = products;
-        listAllProductCate = products;
-        if (widget.category.name!.toLowerCase() == "psu") {
-          listProduct = listProduct
-              .where((element) => element.power! >= widget.estimatePower)
-              .toList();
-          listAllProductCate = listAllProductCate
-              .where((element) => element.power! >= widget.estimatePower)
-              .toList();
-        }
+      // PCComponentAPI.getListProductComponent(widget.category.name!)
+      //     .then((products) {
+      //   listProduct = products;
+      //   listAllProductCate = products;
+      //   if (widget.category.name!.toLowerCase() == "psu") {
+      //     listProduct = listProduct
+      //         .where((element) => element.power! >= widget.estimatePower)
+      //         .toList();
+      //     listAllProductCate = listAllProductCate
+      //         .where((element) => element.power! >= widget.estimatePower)
+      //         .toList();
+      //   }
+      //   if (mounted) {
+      //     setState(() {
+      //       isLoading = false;
+      //     });
+      //   }
+      // });
+      ProductAPI.getListProduct().then((products) {
+        listProduct = products
+            .where((element) => element.categoryName!
+                .toLowerCase()
+                .contains(widget.category.name!.toLowerCase()))
+            .toList();
+        listAllProductCate = products
+            .where((element) => element.categoryName!
+                .toLowerCase()
+                .contains(widget.category.name!.toLowerCase()))
+            .toList();
         if (mounted) {
           setState(() {
             isLoading = false;
@@ -100,42 +117,49 @@ class _ChooseDeviceScreenState extends State<ChooseDeviceScreen> {
           await checkMainComponent(p, "storage");
         }
       }
-      if (processor.productId != "" ||
-          motherboard.productId != "" ||
-          caseSpec.productId != "" ||
-          gpu.productId != "" ||
-          ram.productId != "" ||
-          storage.productId != "") {
-        PCComponentAPI.getListProductComponentPost(widget.category.name!,
-                processor, motherboard, caseSpec, gpu, ram, storage)
-            .then((products) {
-          listProduct = products;
-          listAllProductCate = products;
-          if (mounted) {
-            setState(() {
-              isLoading = false;
-            });
-          }
-        });
-      } else {
-        ProductAPI.getListProduct().then((products) {
-          listProduct = products
-              .where((element) => element.categoryName!
-                  .toLowerCase()
-                  .contains(widget.category.name!.toLowerCase()))
-              .toList();
-          listAllProductCate = products
-              .where((element) => element.categoryName!
-                  .toLowerCase()
-                  .contains(widget.category.name!.toLowerCase()))
-              .toList();
-          if (mounted) {
-            setState(() {
-              isLoading = false;
-            });
-          }
-        });
-      }
+      // if (processor.productId != "" ||
+      //     motherboard.productId != "" ||
+      //     caseSpec.productId != "" ||
+      //     gpu.productId != "" ||
+      //     ram.productId != "" ||
+      //     storage.productId != "") {
+      PCComponentAPI.getListProductComponentPost(
+              widget.category.name!,
+              processor,
+              motherboard,
+              caseSpec,
+              gpu,
+              ram,
+              storage,
+              widget.listSelectedProduct)
+          .then((products) {
+        listProduct = products;
+        listAllProductCate = products;
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+      // } else  {
+      //   ProductAPI.getListProduct().then((products) {
+      //     listProduct = products
+      //         .where((element) => element.categoryName!
+      //             .toLowerCase()
+      //             .contains(widget.category.name!.toLowerCase()))
+      //         .toList();
+      //     listAllProductCate = products
+      //         .where((element) => element.categoryName!
+      //             .toLowerCase()
+      //             .contains(widget.category.name!.toLowerCase()))
+      //         .toList();
+      //     if (mounted) {
+      //       setState(() {
+      //         isLoading = false;
+      //       });
+      //     }
+      //   });
+      // }
     }
   }
 

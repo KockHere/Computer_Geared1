@@ -64,7 +64,7 @@ class CartCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        "${cartItem.unitPrice}đ",
+                        "${formatCurrency(double.parse(cartItem.unitPrice!.replaceAll(",", ""))).replaceAll(".", ",")}đ",
                         style: const TextStyle(
                             fontWeight: FontWeight.w600, color: kPrimaryColor),
                       ),

@@ -57,4 +57,38 @@ class PCBuilderAPI {
     }
     return false;
   }
+
+  static Future<List<UserPC>> getListUserPcRecommend() async {
+    List<UserPC> listUserPc = [];
+    final response = await http.get(
+      Uri.parse("${urlApi}product/pc-component/get-pre-build"),
+      headers: <String, String>{
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+    if (response.statusCode == 201) {
+      List<dynamic> bodyJson = json.decode(utf8.decode(response.bodyBytes));
+      for (var element in bodyJson) {
+        listUserPc.add(UserPC.fromJson(element));
+      }
+    }
+    return listUserPc;
+  }
+
+  static Future<bool> copyBuildPC(String id) async {
+    final response = await http.post(
+      Uri.parse("${urlApi}auth/user/pc-component/copy-personal-build/$id"),
+      headers: <String, String>{
+        HttpHeaders.acceptHeader: 'application/json',
+        HttpHeaders.authorizationHeader: user.accessToken ?? "",
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
 }

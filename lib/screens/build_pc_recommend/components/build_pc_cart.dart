@@ -36,91 +36,11 @@ class BuildPCCard extends StatelessWidget {
         color: Colors.white,
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    Text(
-                      category.description ?? "",
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    if (category.name!.toLowerCase().startsWith(
-                        RegExp(r'motherboard|processor|psu|ram|storage'))) ...[
-                      const SizedBox(width: 10),
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              cartItem.productId == ""
-                  ? GestureDetector(
-                      onTap: onTap,
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(10, 8, 16, 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: kPrimaryColor,
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              "Select",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : Row(
-                      children: [
-                        GestureDetector(
-                          onTap: onTapEdit,
-                          child: Container(
-                            padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: const Color(0xff1d7be5),
-                            ),
-                            child: const Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: onTapDelete,
-                          child: Container(
-                            padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: const Color(0xffe51d24),
-                            ),
-                            child: const Icon(
-                              Icons.clear,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-            ],
+          Text(
+            category.description ?? "",
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           if (cartItem.productId != "") ...[
             const SizedBox(height: 10),

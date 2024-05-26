@@ -18,7 +18,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(
-          "Thông báo",
+          "Notification",
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),

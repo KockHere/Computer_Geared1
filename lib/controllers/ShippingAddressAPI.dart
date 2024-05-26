@@ -25,7 +25,9 @@ class ShippingAddressAPI {
     }
     return listShippingAddress;
   }
-  static Future<bool> createShippingAddress(ShippingAddress shippingAddress) async {
+
+  static Future<bool> createShippingAddress(
+      ShippingAddress shippingAddress) async {
     final response = await http.post(
       Uri.parse("${urlApi}auth/user/shipping-address"),
       headers: <String, String>{
@@ -39,6 +41,7 @@ class ShippingAddressAPI {
     }
     return false;
   }
+
   static Future<bool> deleteShippingAddress(String shippingAddressId) async {
     final response = await http.delete(
       Uri.parse("${urlApi}auth/user/shipping-address/$shippingAddressId"),

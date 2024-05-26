@@ -35,7 +35,7 @@ class Categories extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ProductsScreen(
-                      title: categories[index].name ?? "",
+                      category: categories[index],
                       products: listAllProduct
                           .where((element) => element.categoryName!
                               .toLowerCase()

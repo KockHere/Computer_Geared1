@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shop_app/controllers/CartAPI.dart';
 import 'package:shop_app/controllers/PCComponentAPI.dart';
+import 'package:shop_app/controllers/ProductAPI.dart';
 import 'package:shop_app/models/CartItem.dart';
+import 'package:shop_app/models/Review.dart';
 import 'package:shop_app/models/specifications/Case.dart';
 import 'package:shop_app/models/specifications/CaseCooler.dart';
 import 'package:shop_app/models/specifications/CpuCooler.dart';
@@ -13,6 +15,7 @@ import 'package:shop_app/models/specifications/Processor.dart';
 import 'package:shop_app/models/specifications/Psu.dart';
 import 'package:shop_app/models/specifications/Ram.dart';
 import 'package:shop_app/models/specifications/Storage.dart';
+import 'package:shop_app/screens/details/components/review_card.dart';
 import 'package:shop_app/screens/loading/loading_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/show_dialog.dart';
@@ -58,6 +61,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   bool isShowSpec = false;
 
+  List<Review> listReview = [];
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -71,6 +76,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       setState(() {
         isLoading = true;
       });
+      getListReview(product.productId ?? "");
       checkMainComponent(product, product.categoryName!.toLowerCase())
           .then((value) {
         if (processor.productId != "") {
@@ -134,6 +140,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
+  Future<void> getListReview(String productId) async {
+    listReview = await ProductAPI.getListReview(productId);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -177,9 +188,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Text(
-                          "4.7",
-                          style: TextStyle(
+                        Text(
+                          listReview.isEmpty
+                              ? "4"
+                              : (listReview.fold(
+                                          0,
+                                          (sum, item) =>
+                                              sum + (item.rating ?? 0)) /
+                                      listReview.length)
+                                  .toString(),
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
@@ -211,68 +229,65 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           isShowSpec = !isShowSpec;
                         });
                       },
+                      childQuantity: ColorDots(
+                        product: product,
+                        quantity: quantity,
+                        onTapMinus: () {
+                          if (quantity > 1) {
+                            setState(() {
+                              quantity--;
+                            });
+                          }
+                        },
+                        onTapPlus: () {
+                          int maxQuantity = 1000;
+                          if (motherboard.productId != "") {
+                            if (product.categoryName!
+                                .toLowerCase()
+                                .contains("ram")) {
+                              maxQuantity = motherboard.memorySlots ?? 1;
+                            } else {
+                              if (product.name!
+                                  .toLowerCase()
+                                  .contains("sata")) {
+                                maxQuantity = int.parse(
+                                    motherboard.sata!.split(" x ")[0]);
+                              } else if (product.name!
+                                  .toLowerCase()
+                                  .contains("pcie")) {
+                                maxQuantity =
+                                    int.parse(motherboard.m2!.split(" x ")[0]);
+                              }
+                            }
+                          }
+
+                          if (quantity < maxQuantity) {
+                            setState(() {
+                              quantity++;
+                            });
+                          }
+                        },
+                        isShowQuantity: (product.categoryName!
+                                    .toLowerCase()
+                                    .contains(RegExp(r'ram|storage')) &&
+                                motherboard.productId != "") ||
+                            !isBuildPC,
+                      ),
                     ),
                     TopRoundedContainer(
                       color: const Color(0xFFF6F7F9),
-                      child: Column(
-                        children: [
-                          ColorDots(
-                            product: product,
-                            onTap1: () {
-                              setState(() {
-                                selectedColor = 1;
-                              });
-                            },
-                            onTap2: () {
-                              setState(() {
-                                selectedColor = 2;
-                              });
-                            },
-                            selectedColor: selectedColor,
-                            quantity: quantity,
-                            onTapMinus: () {
-                              if (quantity > 1) {
-                                setState(() {
-                                  quantity--;
-                                });
-                              }
-                            },
-                            onTapPlus: () {
-                              int maxQuantity = 1000;
-                              if (motherboard.productId != "") {
-                                if (product.categoryName!
-                                    .toLowerCase()
-                                    .contains("ram")) {
-                                  maxQuantity =
-                                      int.parse(motherboard.memorySlots ?? "1");
-                                } else {
-                                  if (product.name!
-                                      .toLowerCase()
-                                      .contains("sata")) {
-                                    maxQuantity = int.parse(
-                                        motherboard.sata!.split(" x ")[0]);
-                                  } else if (product.name!
-                                      .toLowerCase()
-                                      .contains("pcie")) {
-                                    maxQuantity = int.parse(
-                                        motherboard.m2!.split(" x ")[0]);
-                                  }
-                                }
-                              }
-
-                              if (quantity < maxQuantity) {
-                                setState(() {
-                                  quantity++;
-                                });
-                              }
-                            },
-                            isShowQuantity: (product.categoryName!
-                                        .toLowerCase()
-                                        .contains(RegExp(r'ram|storage')) &&
-                                    motherboard.productId != "") ||
-                                !isBuildPC,
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          children: [
+                            ...List.generate(
+                              listReview.length,
+                              (index) => ReviewCard(
+                                review: listReview[index],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

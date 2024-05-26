@@ -22,6 +22,7 @@ class Orders {
   String? recipientName;
   String? streetAddress;
   String? city;
+  bool? allowReview;
 
   Orders({
     this.orderId,
@@ -43,6 +44,7 @@ class Orders {
     this.recipientName,
     this.streetAddress,
     this.city,
+    this.allowReview,
   });
 
   factory Orders.fromJson(Map<String, dynamic> json) => Orders(
@@ -72,6 +74,7 @@ class Orders {
         recipientName: json["recipient_name"],
         streetAddress: json["street_address"],
         city: json["city"],
+        allowReview: json["allow_review"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -96,5 +99,6 @@ class Orders {
         "recipient_name": recipientName,
         "street_address": streetAddress,
         "city": city,
+        "allow_review": allowReview,
       };
 }

@@ -268,3 +268,30 @@ Future<void> showDialogUpdateUserSuccess(BuildContext context) async {
     },
   );
 }
+
+Future<void> showDialogRatingSuccess(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Icon(Icons.check_circle_outline,
+            size: 50, color: Colors.green),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [Text('Rating product success')],
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Confirm",
+                style: TextStyle(
+                    color: kPrimaryColor, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      );
+    },
+  );
+}

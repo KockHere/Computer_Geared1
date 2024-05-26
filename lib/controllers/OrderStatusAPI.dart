@@ -9,7 +9,7 @@ import 'package:shop_app/models/OrderStatus.dart';
 
 class OrderStatusAPI {
   static Future<List<OrderStatus>> getListOrderStatus() async {
-    List<OrderStatus> listOrderStatus= [];
+    List<OrderStatus> listOrderStatus = [];
     final response = await http.get(
       Uri.parse("${urlApi}auth/user/order-status"),
       headers: <String, String>{

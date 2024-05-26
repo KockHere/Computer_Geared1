@@ -73,33 +73,56 @@ class PCComponentAPI {
       Case caseSpec,
       Gpu gpu,
       Ram ram,
-      Storage storage) async {
+      Storage storage,
+      List<Product> listSelectedProduct) async {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (category != "processor") {
-      data["processorDetails"] = processor.productId == "" ? null : processor;
-      data["processor_brand_id"] = processor.productBrandId ?? "";
-    }
-    if (category != "motherboard") {
-      data["motherboardDetail"] =
-          motherboard.productId == "" ? null : motherboard;
-      data["motherboard_brand_id"] = motherboard.productBrandId ?? "";
-    }
-    if (category != "case") {
-      data["caseDetails"] = caseSpec.productId == "" ? null : caseSpec;
-      data["case_brand_id"] = caseSpec.productBrandId ?? "";
-    }
-    if (category != "gpu") {
-      data["gpuDetail"] = gpu.productId == "" ? null : gpu;
-      data["gpu_brand_id"] = gpu.productBrandId ?? "";
-    }
-    if (category != "ram") {
-      data["ramDetails"] = ram.productId == "" ? null : ram;
-      data["ram_brand_id"] = ram.productBrandId ?? "";
-    }
-    if (category != "storage") {
-      data["storageDetail"] = storage.productId == "" ? null : storage;
-      data["storage_brand_id"] = storage.productBrandId ?? "";
-    }
+    data["storageDetail"] = storage.toJson2();
+    data["ramDetails"] = ram.toJson2();
+    data["caseDetails"] = caseSpec.toJson2();
+    data["processorDetails"] = processor.toJson2();
+    data["motherboardDetail"] = motherboard.toJson2();
+    // data["gpuDetail"] = gpu.toJson2();
+    Product? productProcessor = listSelectedProduct.isEmpty
+        ? null
+        : listSelectedProduct.firstWhere(
+            (element) => element.categoryName!.toLowerCase() == "processor",
+            orElse: () => Product());
+    data["processoBrandId"] = productProcessor?.productBrandId;
+
+    Product? productMotherboard = listSelectedProduct.isEmpty
+        ? null
+        : listSelectedProduct.firstWhere(
+            (element) => element.categoryName!.toLowerCase() == "motherboard",
+            orElse: () => Product());
+    data["motherboardBrandId"] = productMotherboard?.productBrandId;
+
+    Product? productCase = listSelectedProduct.isEmpty
+        ? null
+        : listSelectedProduct.firstWhere(
+            (element) => element.categoryName!.toLowerCase() == "case",
+            orElse: () => Product());
+    data["caseBrandId"] = productCase?.productBrandId;
+
+    Product? productGpu = listSelectedProduct.isEmpty
+        ? null
+        : listSelectedProduct.firstWhere(
+            (element) => element.categoryName!.toLowerCase() == "gpu",
+            orElse: () => Product());
+    data["gpuBrandId"] = productGpu?.productBrandId;
+
+    Product? productStorage = listSelectedProduct.isEmpty
+        ? null
+        : listSelectedProduct.firstWhere(
+            (element) => element.categoryName!.toLowerCase() == "storage",
+            orElse: () => Product());
+    data["storageBrandId"] = productStorage?.productBrandId;
+
+    Product? productRam = listSelectedProduct.isEmpty
+        ? null
+        : listSelectedProduct.firstWhere(
+            (element) => element.categoryName!.toLowerCase() == "ram",
+            orElse: () => Product());
+    data["ramBrandId"] = productRam?.productBrandId;
 
     if (category.toLowerCase() == "gpu") {
       category = "graphics-card";

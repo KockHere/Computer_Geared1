@@ -10,6 +10,8 @@ class Category {
 
   List<Brand>? brandList;
 
+  
+
   Category({
     this.categoryId,
     this.parentId,
@@ -31,10 +33,7 @@ class Category {
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
-        brandList: json["brand_list"] == null
-            ? []
-            : List<Brand>.from(
-                json["brand_list"]!.map((x) => Brand.fromJson(x))),
+        brandList: json["brand_list"] == null ? [] : List<Brand>.from(json["brand_list"]!.map((x) => Brand.fromJson(x))),    
       );
 
   Map<String, dynamic> toJson() => {

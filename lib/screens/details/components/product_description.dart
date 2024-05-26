@@ -10,12 +10,14 @@ class ProductDescription extends StatelessWidget {
     required this.specification,
     required this.isShowSpec,
     required this.onTapShowSpec,
+    required this.childQuantity,
   });
 
   final Product product;
   final Map<String, dynamic> specification;
   final bool isShowSpec;
   final Function() onTapShowSpec;
+  final Widget childQuantity;
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +58,20 @@ class ProductDescription extends StatelessWidget {
               ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Text(
-            "${product.unitPrice}đ",
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: kPrimaryColor,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                //"${product.unitPrice}đ",
+                "${formatCurrency(double.parse(product.unitPrice!.replaceAll(",", ""))).replaceAll(".", ",")}đ",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: kPrimaryColor,
+                ),
+              ),
+              childQuantity,
+            ],
           ),
         ),
         Padding(

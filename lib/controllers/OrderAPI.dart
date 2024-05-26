@@ -74,4 +74,23 @@ class OrderAPI {
     }
     return orderId;
   }
+
+  static Future<bool> ratingOrderDetail(
+      String orderDetailId, int rating, String review) async {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["rating"] = rating;
+    data["review"] = review;
+    final response = await http.put(
+      Uri.parse("${urlApi}auth/user/order-rating/$orderDetailId"),
+      headers: <String, String>{
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: user.accessToken ?? "",
+      },
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
 }

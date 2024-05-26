@@ -80,8 +80,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     shippingAddress = listShippingAddress[0];
     listCartItem = [];
     for (Cart element in listUserCart) {
-      if (element.personalBuildPcId == "" && element.productList!.isNotEmpty) {
-        listCartItem.add(element.productList!.first);
+      if (element.personalBuildPcId == "" || element.buildPcDetail == null) {
+        if (element.productList!.isNotEmpty) {
+          listCartItem.add(element.productList!.first);
+        }
       } else if (element.personalBuildPcId != "") {
         List<CartItem> listCartItemBuildPc = [];
         if (element.buildPcDetail!.motherboardSpecification != null) {

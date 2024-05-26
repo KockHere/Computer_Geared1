@@ -3,27 +3,34 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-
 import 'package:shop_app/models/specifications/AutoGen.dart';
+
 import 'package:shop_app/variables.dart';
 
 class AutoGenAPI {
   static Future<AutoGen> getListProductAutoGen(
-      List<String> purpose, int priceRange) async {
-    Map<String, dynamic> data = {};
-    data["purpose"] = "null";
-    data["price_range"] = priceRange;
+      String purpose, int priceRange) async {
+    int purposeNumber = 1;
+    if (purpose == "CUSTOM") {
+      purposeNumber = 3;
+    } else if (purpose == "OFFICE") {
+      purposeNumber = 2;
+    } else {
+      purposeNumber = 1;
+    }
     AutoGen autoGen = AutoGen();
-    final response = await http.post(
-      Uri.parse("${urlApi}pc-component/random/auto-gen"),
+    final response = await http.get(
+      Uri.parse(
+          "${urlApi}pc-component/auto-gen-by-purpose/$purposeNumber?total=${priceRange * 1000000}"),
       headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       },
-      body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
-      var bodyJson = json.decode(utf8.decode(response.bodyBytes));
-      autoGen = AutoGen.fromJson(bodyJson);
+      if (response.contentLength != 0) {
+        var bodyJson = json.decode(utf8.decode(response.bodyBytes));
+        autoGen = AutoGen.fromJson(bodyJson);
+      }
     }
     return autoGen;
   }

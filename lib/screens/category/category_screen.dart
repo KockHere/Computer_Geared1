@@ -37,7 +37,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           .where((category) =>
               category.parentId == "6f5acf44-4542-4c5c-be43-6a71b150f752")
           .toList();
-      listChildCategory = listAllCategory.take(5).toList();
+      listChildCategory = listAllCategory.skip(2).take(5).toList();
       ProductAPI.getListProduct().then((products) {
         listAllProduct = products;
         if (mounted) {
@@ -64,7 +64,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     ),
                   );
                 },
-                child: Icon(Icons.arrow_back)),
+                child: const Icon(Icons.arrow_back)),
             centerTitle: true,
             backgroundColor: Colors.white,
             title: Text(
@@ -188,7 +188,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ProductsScreen(
-                                  title: listChildCategory[index].name ?? "",
+                                  category: listChildCategory[index],
                                   products: listAllProduct
                                       .where((element) => element.categoryName!
                                           .toLowerCase()
@@ -210,7 +210,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProductsScreen(
-                                title: "All PC Product",
+                                category: Category(
+                                    name: "All PC Product", brandList: []),
                                 products: listAllProduct,
                               ),
                             ),

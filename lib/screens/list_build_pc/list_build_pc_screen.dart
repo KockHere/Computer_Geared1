@@ -4,6 +4,7 @@ import 'package:shop_app/controllers/PCBuilderAPI.dart';
 import 'package:shop_app/models/specifications/UserPC.dart';
 import 'package:shop_app/screens/build_pc/build_pc_screen.dart';
 import 'package:shop_app/screens/list_build_pc/components/pc_build_card.dart';
+import 'package:shop_app/screens/list_build_pc_recommend/list_build_pc_recommend_screen.dart';
 import 'package:shop_app/screens/loading/loading_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/variables.dart';
@@ -98,39 +99,106 @@ class _ListBuildPcScreenState extends State<ListBuildPcScreen> {
     });
   }
 
+  Future<void> _showDialogUpdateNamePC(UserPC userPc) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Update PC Build'),
+          content: TextFormField(
+            initialValue: userPc.profileName,
+            onChanged: (value) {
+              userPc.profileName = value;
+            },
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.zero,
+              hintText: "Enter PC Build Name",
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: kPrimaryColor),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: kPrimaryColor),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel',
+                  style: TextStyle(
+                      color: kPrimaryColor, fontWeight: FontWeight.w600)),
+            ),
+            const SizedBox(width: 20),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+                updateNewPcBuild(userPc);
+              },
+              child: const Text('Update',
+                  style: TextStyle(
+                      color: kPrimaryColor, fontWeight: FontWeight.w600)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void updateNewPcBuild(UserPC userPcUpdate) {
+    setState(() {
+      isLoading = true;
+    });
+    PCBuilderAPI.addNewPC(userPcUpdate).then((result) {
+      if (result) {
+        PCBuilderAPI.getListUserPc().then((data) {
+          listUserPc = data;
+          if (mounted) {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        });
+      }
+    });
+  }
+
   int updateTotalPrice(UserPC userPC) {
     int totalPrice = 0;
     if (userPC.motherboardSpecification != null) {
-      totalPrice += userPC.motherboardSpecification!.unitPrice!;
+      totalPrice += int.parse(userPC.motherboardSpecification!.unitPrice!);
     }
     if (userPC.processorSpecification != null) {
-      totalPrice += userPC.processorSpecification!.unitPrice!;
+      totalPrice += int.parse(userPC.processorSpecification!.unitPrice!);
     }
     if (userPC.caseSpecification != null) {
-      totalPrice += userPC.caseSpecification!.unitPrice!;
+      totalPrice += int.parse(userPC.caseSpecification!.unitPrice!);
     }
     if (userPC.gpuSpecification != null) {
-      totalPrice += userPC.gpuSpecification!.unitPrice!;
+      totalPrice += int.parse(userPC.gpuSpecification!.unitPrice!);
     }
     if (userPC.ramSpecification != null) {
-      totalPrice += userPC.ramSpecification!.unitPrice! * userPC.ramQuantity!;
+      totalPrice +=
+          int.parse(userPC.ramSpecification!.unitPrice!) * userPC.ramQuantity!;
     }
 
     if (userPC.storageSpecification != null) {
-      totalPrice +=
-          userPC.storageSpecification!.unitPrice! * userPC.storageQuantity!;
+      totalPrice += int.parse(userPC.storageSpecification!.unitPrice!) *
+          userPC.storageQuantity!;
     }
     if (userPC.cpuCoolerSpecification != null) {
-      totalPrice += userPC.cpuCoolerSpecification!.unitPrice!;
+      totalPrice += int.parse(userPC.cpuCoolerSpecification!.unitPrice!);
     }
     if (userPC.caseCoolerSpecification != null) {
-      totalPrice += userPC.caseCoolerSpecification!.unitPrice!;
+      totalPrice += int.parse(userPC.caseCoolerSpecification!.unitPrice!);
     }
     if (userPC.psuSpecification != null) {
-      totalPrice += userPC.psuSpecification!.unitPrice!;
+      totalPrice += int.parse(userPC.psuSpecification!.unitPrice!);
     }
     if (userPC.monitorSpecification != null) {
-      totalPrice += userPC.monitorSpecification!.unitPrice!;
+      totalPrice += int.parse(userPC.monitorSpecification!.unitPrice!);
     }
     return totalPrice;
   }
@@ -174,6 +242,40 @@ class _ListBuildPcScreenState extends State<ListBuildPcScreen> {
           "PC Build List",
           style: Theme.of(context).textTheme.titleLarge,
         ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ListBuildPcRecommendScreen()),
+              ).then((result) {
+                if (result != null && result == true) {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  PCBuilderAPI.getListUserPc().then((data) {
+                    listUserPc = data;
+                    if (mounted) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+                  });
+                }
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.only(right: 20),
+              color: Colors.transparent,
+              child: const Text(
+                "Recommend",
+                style: TextStyle(
+                    color: kPrimaryColor, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
       ),
       backgroundColor: const Color(0xfff6f6f6),
       body: Stack(
@@ -214,6 +316,9 @@ class _ListBuildPcScreenState extends State<ListBuildPcScreen> {
                                 totalPrice: updateTotalPrice(listUserPc[index]),
                                 description:
                                     updateDescription(listUserPc[index]),
+                                onTapUpdate: () {
+                                  _showDialogUpdateNamePC(listUserPc[index]);
+                                },
                                 onTapDelete: () {
                                   setState(() {
                                     isLoading = true;

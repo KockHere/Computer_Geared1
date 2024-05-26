@@ -20,19 +20,14 @@ class PurposeCard extends StatelessWidget {
         GestureDetector(
           onTap: onTap,
           child: Container(
-            padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey, width: 1),
+              borderRadius: BorderRadius.circular(8),
               color: isCheck ? kPrimaryColor : Colors.white,
-              shape: BoxShape.circle,
             ),
-            child: Container(
-              width: 6,
-              height: 6,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
+            child: const Icon(
+              Icons.check,
+              color: Colors.white,
             ),
           ),
         ),

@@ -8,9 +8,6 @@ class ColorDots extends StatelessWidget {
   const ColorDots({
     super.key,
     required this.product,
-    required this.onTap1,
-    required this.onTap2,
-    required this.selectedColor,
     required this.quantity,
     required this.onTapMinus,
     required this.onTapPlus,
@@ -18,9 +15,6 @@ class ColorDots extends StatelessWidget {
   });
 
   final Product product;
-  final Function() onTap1;
-  final Function() onTap2;
-  final int selectedColor;
   final int quantity;
   final Function() onTapMinus;
   final Function() onTapPlus;
@@ -29,30 +23,13 @@ class ColorDots extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: Row(
         children: [
-          Expanded(
-            child: Container(),
-          ),
-          // GestureDetector(
-          //   onTap: onTap1,
-          //   child: ColorDot(
-          //     color: Colors.white,
-          //     isSelected: selectedColor == 1,
-          //   ),
-          // ),
-          // GestureDetector(
-          //   onTap: onTap2,
-          //   child: ColorDot(
-          //     color: Colors.black,
-          //     isSelected: selectedColor == 2,
-          //   ),
-          // ),
-          // const Spacer(),
           if (isShowQuantity) ...[
             RoundedIconBtn(
               icon: Icons.remove,
+              showShadow: true,
               press: onTapMinus,
             ),
             const SizedBox(width: 4),

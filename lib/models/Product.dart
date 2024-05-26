@@ -1,12 +1,14 @@
 // ignore_for_file: file_names
 class Product {
   String? productId;
+  String? primaryProductId;
   String? name;
   String? description;
   String? unitPrice;
   String? discount;
   int? sold;
   String? categoryName;
+  String? productBrandId;
   String? brandName;
   List<String>? imageLinks;
   dynamic technicalSpecification;
@@ -15,12 +17,14 @@ class Product {
 
   Product({
     this.productId,
+    this.primaryProductId,
     this.name,
     this.description,
     this.unitPrice,
     this.discount,
     this.sold,
     this.categoryName,
+    this.productBrandId,
     this.brandName,
     this.imageLinks,
     this.technicalSpecification,
@@ -30,7 +34,8 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      productId: json["product_id"] ?? "",
+      productId: json["product_id"] ?? json["primary_product_id"] ?? "",
+      primaryProductId: json["primary_product_id"] ?? json["product_id"] ?? "",
       name: json["name"] ?? "",
       description: json["description"] ?? "",
       unitPrice:
@@ -38,6 +43,7 @@ class Product {
       discount: json["discount"] == null ? "" : json["unit_price"].toString(),
       sold: json["sold"],
       categoryName: json["category_name"] ?? "",
+      //productBrandId: json["product_brand_id"] ?? "",
       brandName: json["brand_name"] ?? "",
       imageLinks: json["image_links"] == null ||
               json["image_links"].isEmpty ||
@@ -57,6 +63,7 @@ class Product {
         "discount": discount,
         "sold": sold,
         "category_name": categoryName,
+        //"product_brand_id": productBrandId,
         "brand_name": brandName,
         "image_links": imageLinks == null
             ? []

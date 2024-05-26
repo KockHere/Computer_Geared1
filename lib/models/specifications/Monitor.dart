@@ -1,112 +1,64 @@
-// ignore_for_file: file_names
-
 class Monitor {
-  String? productId;
-  String? name;
-  dynamic description;
-  int? unitPrice;
-  int? discount;
-  int? sold;
-  String? categoryName;
-  String? brandName;
-  List<String>? imageLinks;
   String? specificationId;
-  String? productSpecificationType;
-  String? brand;
+  String? productId;
   String? model;
-  String? screenSize;
+  int? screenSize;
   String? resolution;
-  String? responseTime;
-  String? aspectRation;
-  String? refreshRate;
+  int? responseTime;
+  String? aspectRatio;
+  int? refreshRate;
   String? panelType;
+  int? voltage;
 
   Monitor({
-    this.productId,
-    this.name,
-    this.description,
-    this.unitPrice,
-    this.discount,
-    this.sold,
-    this.categoryName,
-    this.brandName,
-    this.imageLinks,
     this.specificationId,
-    this.productSpecificationType,
-    this.brand,
+    this.productId,
     this.model,
     this.screenSize,
     this.resolution,
     this.responseTime,
-    this.aspectRation,
+    this.aspectRatio,
     this.refreshRate,
     this.panelType,
+    this.voltage,
   });
 
   factory Monitor.fromJson(Map<String, dynamic> json) => Monitor(
-        productId: json["product_id"] ?? json["primary_product_id"],
-        name: json["name"],
-        description: json["description"],
-        unitPrice: int.parse(json["unit_price"].toString().replaceAll(",", "")),
-        discount: json["discount"] == null
-            ? 0
-            : int.parse(json["discount"]
-                .toString()
-                .replaceAll(",", "")
-                .replaceAll(".", "")),
-        sold: json["sold"],
-        categoryName: json["category_name"],
-        brandName: json["brand_name"],
-        imageLinks: json["image_links"] == null ||
-                json["image_links"].isEmpty ||
-                json["image_links"][0] == null
-            ? []
-            : List<String>.from(json["image_links"]!.map((x) => x)),
         specificationId: json["specification_id"],
-        productSpecificationType: json["product_specification_type"],
-        brand: json["brand"],
+        productId: json["product_id"],
         model: json["model"],
         screenSize: json["screen_size"],
         resolution: json["resolution"],
         responseTime: json["response_time"],
-        aspectRation: json["aspect_ration"],
+        aspectRatio: json["aspect_ratio"],
         refreshRate: json["refresh_rate"],
         panelType: json["panel_type"],
+        voltage: json["voltage"],
       );
 
   Map<String, dynamic> toJson() => {
-        "product_id": productId,
-        "name": name,
-        "description": description,
-        "unit_price": unitPrice,
-        "discount": discount,
-        "sold": sold,
-        "category_name": categoryName,
-        "brand_name": brandName,
-        "image_links": imageLinks == null
-            ? []
-            : List<dynamic>.from(imageLinks!.map((x) => x)),
         "specification_id": specificationId,
-        "product_specification_type": productSpecificationType,
-        "brand": brand,
+        "product_id": productId,
         "model": model,
         "screen_size": screenSize,
         "resolution": resolution,
         "response_time": responseTime,
-        "aspect_ration": aspectRation,
+        "aspect_ratio": aspectRatio,
         "refresh_rate": refreshRate,
         "panel_type": panelType,
+        "voltage": voltage,
       };
 
   Map<String, dynamic> toJson1() => {
-        //"Product Specification Type": productSpecificationType,
-        "Brand": brand,
+        //"specification_id": specificationId,
+        //"product_id": productId,
         "Model": model,
         "Screen Size": screenSize,
         "Resolution": resolution,
         "Response Time": responseTime,
-        "Aspect Ratio": aspectRation,
+        "Aspect Ratio": aspectRatio,
         "Refresh Rate": refreshRate,
         "Panel Type": panelType,
+        "Voltage": voltage,
       };
 }

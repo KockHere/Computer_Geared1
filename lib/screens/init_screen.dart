@@ -80,8 +80,6 @@ class _InitScreenState extends State<InitScreen> {
     super.initState();
   }
 
-  void getSharedPre() async {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
