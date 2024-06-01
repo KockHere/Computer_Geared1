@@ -26,6 +26,6 @@ class Psu {
       };
   Map<String, dynamic> toJson1() => {
         "Model": model,
-        "Power": power,
+        "Power": "${power} W",
       };
 }

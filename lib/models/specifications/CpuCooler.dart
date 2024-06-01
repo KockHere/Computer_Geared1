@@ -52,11 +52,11 @@ class CpuCooler {
   Map<String, dynamic> toJson1() => {
         "Model": model,
         "CPU Cooler": cpuCooler,
-        "Fan RPM": fanRpm,
+        "Fan RPM": "${fanRpm} rpm",
         "Noise Level": noiseLevel,
         "Fan Number": fanNumber,
-        "CPU Cooler Size": cpuCoolerSize,
-        "Fan CFM": fanCfm,
-        "Voltage": voltage,
+        "CPU Cooler Size": "${cpuCoolerSize} mm",
+        "Fan CFM": "${fanRpm} cfm",
+        "Voltage": "${voltage} W",
       };
 }

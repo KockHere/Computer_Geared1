@@ -53,12 +53,12 @@ class Monitor {
         //"specification_id": specificationId,
         //"product_id": productId,
         "Model": model,
-        "Screen Size": screenSize,
+        "Screen Size": "${screenSize} inch",
         "Resolution": resolution,
-        "Response Time": responseTime,
+        "Response Time": "${responseTime} ms",
         "Aspect Ratio": aspectRatio,
-        "Refresh Rate": refreshRate,
+        "Refresh Rate": "${refreshRate} Hz",
         "Panel Type": panelType,
-        "Voltage": voltage,
+        "Voltage": "${voltage} W",
       };
 }

@@ -40,11 +40,11 @@ class Ram {
   Map<String, dynamic> toJson1() => {
         //"specification_id": specificationId,
         //"product_id": productId,
-        "Memory": memory,
+        "Memory": "${memory} GB",
         "RAM Type": ramType,
         "CAS Latency": casLatency,
         "DIMM Type": dimmType,
-        "Voltage": voltage,
+        "Voltage": "${memory} W",
       };
   Map<String, dynamic> toJson2() =>
       {"ramId": productId == "" ? null : productId};

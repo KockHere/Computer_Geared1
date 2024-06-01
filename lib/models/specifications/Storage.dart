@@ -48,8 +48,8 @@ class Storage {
         "Type": type,
         "Interface": storageInterface,
         "Form Factor": formFactor,
-        "Capacity": capacity,
-        "Voltage": voltage,
+        "Capacity": "${capacity} GB",
+        "Voltage": "${voltage} W",
       };
   Map<String, dynamic> toJson2() =>
       {"storageId": productId == "" ? null : productId};

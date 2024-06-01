@@ -9,19 +9,11 @@ import 'package:shop_app/variables.dart';
 
 class AutoGenAPI {
   static Future<AutoGen> getListProductAutoGen(
-      String purpose, int priceRange) async {
-    int purposeNumber = 1;
-    if (purpose == "CUSTOM") {
-      purposeNumber = 3;
-    } else if (purpose == "OFFICE") {
-      purposeNumber = 2;
-    } else {
-      purposeNumber = 1;
-    }
+      int purpose, int priceRange) async {
     AutoGen autoGen = AutoGen();
     final response = await http.get(
       Uri.parse(
-          "${urlApi}pc-component/auto-gen-by-purpose/$purposeNumber?total=${priceRange * 1000000}"),
+          "${urlApi}pc-component/auto-gen-by-purpose/$purpose?total=${priceRange * 1000000}"),
       headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json',
       },

@@ -1,13 +1,14 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/controllers/AutoGenAPI.dart';
+import 'package:shop_app/controllers/BuildPurposeAPI.dart';
 import 'package:shop_app/controllers/CartAPI.dart';
 import 'package:shop_app/controllers/CategoryAPI.dart';
 import 'package:shop_app/controllers/PCBuilderAPI.dart';
 import 'package:shop_app/controllers/PCComponentAPI.dart';
+import 'package:shop_app/models/BuildPurpose.dart';
 import 'package:shop_app/models/CartItem.dart';
 import 'package:shop_app/models/Category.dart';
 import 'package:shop_app/models/Product.dart';
@@ -54,13 +55,44 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
   int totalPower = 0;
 
   Psu psu = Psu(productId: "", power: 0);
-
+  CaseCooler caseCooler = CaseCooler(productId: "", voltage: 0);
+  Motherboard motherboard = Motherboard(productId: "", power: 0);
+  CpuCooler cpuCooler = CpuCooler(productId: "", voltage: 0);
+  Monitor monitor = Monitor(productId: "", voltage: 0);
+  //Ram ram = Ram(productId: "", voltage: 0);
+  Storage storage = Storage(productId: "", voltage: 0);
   Gpu gpu = Gpu(productId: "", maxPowerConsumption: 0);
   Processor processor = Processor(productId: "", power: 0);
 
-  int selectedPrice = 20;
+  int selectedPrice = 0;
 
   String selectedPurpose = "GAMING";
+
+  Future<void> _showDialogNoBuild() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('No Build'),
+          content: const Text('There is no suitable build !'),
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Confirm',
+                  style: TextStyle(
+                      color: kPrimaryColor, fontWeight: FontWeight.w600)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<BuildPurpose> listBuildPurpose = [];
+  BuildPurpose buildPurpose = BuildPurpose();
 
   @override
   void initState() {
@@ -68,6 +100,14 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
     setState(() {
       isLoading = true;
     });
+
+    BuildPurposeAPI.getListBuildPurpose().then(
+      (value) {
+        listBuildPurpose = value;
+        buildPurpose = listBuildPurpose.first;
+      },
+    );
+
     CategoryAPI.getListCategory().then((categories) {
       listCategory = categories
           .where((element) => element.name!.toLowerCase().contains(RegExp(
@@ -131,6 +171,12 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
     bool isGpu = true;
     bool isProccessor = true;
     bool isPsu = true;
+    bool isCaseCooler = true;
+    bool isMotherboard = true;
+    bool isCpuCooler = true;
+    bool isMonitor = true;
+    bool isRam = true;
+    bool isStorage = true;
     for (Product p in listSelectedProduct) {
       if (p.categoryName!.toLowerCase() == "gpu") {
         isGpu = false;
@@ -140,6 +186,60 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
           gpu = Gpu.fromJson(data);
         }
       }
+      if (p.categoryName!.toLowerCase() == "fan") {
+        isCaseCooler = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          caseCooler = CaseCooler.fromJson(data);
+        }
+      }
+
+      if (p.categoryName!.toLowerCase() == "motherboard") {
+        isMotherboard = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          motherboard = Motherboard.fromJson(data);
+        }
+      }
+
+      if (p.categoryName!.toLowerCase() == "cooler cpu") {
+        isCpuCooler = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          cpuCooler = CpuCooler.fromJson(data);
+        }
+      }
+
+      if (p.categoryName!.toLowerCase() == "monitor") {
+        isMonitor = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          monitor = Monitor.fromJson(data);
+        }
+      }
+
+      // if (p.categoryName!.toLowerCase() == "ram") {
+      //   isRam = false;
+      //   Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+      //       p.categoryName ?? "", p.productId ?? "");
+      //   if (data.isNotEmpty) {
+      //     ram = Ram.fromJson(data);
+      //   }
+      // }
+
+      if (p.categoryName!.toLowerCase() == "storage") {
+        isStorage = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          storage = Storage.fromJson(data);
+        }
+      }
+
       if (p.categoryName!.toLowerCase() == "processor") {
         isProccessor = false;
         Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
@@ -148,6 +248,7 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
           processor = Processor.fromJson(data);
         }
       }
+
       if (p.categoryName!.toLowerCase() == "psu") {
         isPsu = false;
         Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
@@ -159,6 +260,24 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
     }
     if (isGpu) {
       gpu = Gpu(productId: "", maxPowerConsumption: 0);
+    }
+    if (isCaseCooler) {
+      caseCooler = CaseCooler(productId: "", voltage: 0);
+    }
+    if (isMotherboard) {
+      motherboard = Motherboard(productId: "", power: 0);
+    }
+    if (isCpuCooler) {
+      cpuCooler = CpuCooler(productId: "", voltage: 0);
+    }
+    if (isMonitor) {
+      monitor = Monitor(productId: "", voltage: 0);
+    }
+    // if (isRam) {
+    //   ram = Ram(productId: "", voltage: 0);
+    // }
+    if (isStorage) {
+      storage = Storage(productId: "", voltage: 0);
     }
     if (isProccessor) {
       processor = Processor(productId: "", power: 0);
@@ -725,47 +844,76 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                             children: [
                               const Text("Purpose"),
                               const SizedBox(height: 10),
-                              SizedBox(
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                color: Colors.grey.withOpacity(0.2),
                                 width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    PurposeCard(
-                                      isCheck: selectedPurpose == "GAMING",
-                                      purposeText: "GAMING",
-                                      onTap: () {
-                                        setState(() {
-                                          selectedPurpose = "GAMING";
-                                        });
-                                      },
-                                    ),
-                                    PurposeCard(
-                                      isCheck: selectedPurpose == "OFFICE",
-                                      purposeText: "OFFICE",
-                                      onTap: () {
-                                        setState(() {
-                                          selectedPurpose = "OFFICE";
-                                        });
-                                      },
-                                    ),
-                                    PurposeCard(
-                                      isCheck: selectedPurpose == "CUSTOM",
-                                      purposeText: "CUSTOM",
-                                      onTap: () {
-                                        setState(() {
-                                          selectedPurpose = "CUSTOM";
-                                        });
-                                      },
-                                    ),
-                                  ],
+                                child: DropdownButton<BuildPurpose>(
+                                  isExpanded: true,
+                                  value: buildPurpose,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  elevation: 16,
+                                  style: const TextStyle(color: kPrimaryColor),
+                                  onChanged: (BuildPurpose? value) {
+                                    setState(() {
+                                      buildPurpose = value!;
+                                    });
+                                  },
+                                  underline: Container(),
+                                  items: listBuildPurpose
+                                      .map<DropdownMenuItem<BuildPurpose>>(
+                                          (BuildPurpose value) {
+                                    return DropdownMenuItem<BuildPurpose>(
+                                      value: value,
+                                      child: Text(value.purposeName ?? ""),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
+                              // SizedBox(
+                              //   width: double.infinity,
+                              //   child: Row(
+                              //     mainAxisAlignment:
+                              //         MainAxisAlignment.spaceBetween,
+                              //     children: [
+                              //       PurposeCard(
+                              //         isCheck: selectedPurpose == "GAMING",
+                              //         purposeText: "GAMING",
+                              //         onTap: () {
+                              //           setState(() {
+                              //             selectedPurpose = "GAMING";
+                              //           });
+                              //         },
+                              //       ),
+                              //       PurposeCard(
+                              //         isCheck: selectedPurpose == "OFFICE",
+                              //         purposeText: "OFFICE",
+                              //         onTap: () {
+                              //           setState(() {
+                              //             selectedPurpose = "OFFICE";
+                              //           });
+                              //         },
+                              //       ),
+                              //       PurposeCard(
+                              //         isCheck: selectedPurpose == "CUSTOM",
+                              //         purposeText: "CUSTOM",
+                              //         onTap: () {
+                              //           setState(() {
+                              //             selectedPurpose = "CUSTOM";
+                              //           });
+                              //         },
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
                               const SizedBox(height: 40),
                               const Text("Price Range"),
                               Center(
                                 child: Text(
-                                  "${selectedPrice.toInt()},000,000đ",
+                                  selectedPrice == 0
+                                      ? "0đ"
+                                      : "${selectedPrice.toInt()},000,000đ",
                                   style: const TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -776,9 +924,9 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                                     selectedPrice = value.toInt();
                                   });
                                 },
-                                min: 20,
+                                min: 0,
                                 max: 100,
-                                divisions: 16,
+                                divisions: 20,
                                 activeColor: kPrimaryColor,
                                 label: "${selectedPrice.toInt()},000,000đ",
                               ),
@@ -789,74 +937,103 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                                     isLoading = true;
                                   });
                                   AutoGenAPI.getListProductAutoGen(
-                                          selectedPurpose, selectedPrice)
+                                          int.parse(
+                                              buildPurpose.purposeId ?? "1"),
+                                          selectedPrice)
                                       .then((userPcGen) {
-                                    listSelectedProduct.clear();
-                                    listSelectedCartItem.clear();
                                     if (userPcGen.motherboardSpecification !=
-                                        null) {
-                                      addListAutoGen(userPcGen
-                                          .motherboardSpecification!
-                                          .toJson());
-                                    }
-                                    if (userPcGen.processorSpecification !=
-                                        null) {
-                                      addListAutoGen(userPcGen
-                                          .processorSpecification!
-                                          .toJson());
-                                    }
-                                    if (userPcGen.caseSpecification != null) {
-                                      addListAutoGen(userPcGen
-                                          .caseSpecification!
-                                          .toJson());
-                                    }
-                                    if (userPcGen.gpuSpecification != null) {
-                                      addListAutoGen(
-                                          userPcGen.gpuSpecification!.toJson());
-                                    }
-                                    if (userPcGen.ramSpecification != null) {
-                                      addListAutoGen(
-                                          userPcGen.ramSpecification!.toJson(),
-                                          quantity: userPcGen.ramQuantity);
-                                    }
-                                    if (userPcGen.storageSpecification !=
-                                        null) {
-                                      addListAutoGen(
-                                          userPcGen.storageSpecification!
-                                              .toJson(),
-                                          quantity: userPcGen.storageQuantity);
-                                    }
-                                    if (userPcGen.caseCoolerSpecification !=
-                                        null) {
-                                      addListAutoGen(userPcGen
-                                          .caseCoolerSpecification!
-                                          .toJson());
-                                    }
-                                    if (userPcGen.monitorSpecification !=
-                                        null) {
-                                      addListAutoGen(userPcGen
-                                          .monitorSpecification!
-                                          .toJson());
-                                    }
+                                            null ||
+                                        userPcGen.processorSpecification !=
+                                            null ||
+                                        userPcGen.caseSpecification != null ||
+                                        userPcGen.gpuSpecification != null ||
+                                        userPcGen.ramSpecification != null ||
+                                        userPcGen.storageSpecification !=
+                                            null ||
+                                        userPcGen.caseCoolerSpecification !=
+                                            null ||
+                                        userPcGen.monitorSpecification !=
+                                            null ||
+                                        userPcGen.cpuCoolerSpecification !=
+                                            null ||
+                                        userPcGen.psuSpecification != null) {
+                                      listSelectedProduct.clear();
+                                      listSelectedCartItem.clear();
+                                      if (userPcGen.motherboardSpecification !=
+                                          null) {
+                                        addListAutoGen(userPcGen
+                                            .motherboardSpecification!
+                                            .toJson());
+                                      }
+                                      if (userPcGen.processorSpecification !=
+                                          null) {
+                                        addListAutoGen(userPcGen
+                                            .processorSpecification!
+                                            .toJson());
+                                      }
+                                      if (userPcGen.caseSpecification != null) {
+                                        addListAutoGen(userPcGen
+                                            .caseSpecification!
+                                            .toJson());
+                                      }
+                                      if (userPcGen.gpuSpecification != null) {
+                                        addListAutoGen(userPcGen
+                                            .gpuSpecification!
+                                            .toJson());
+                                      }
+                                      if (userPcGen.ramSpecification != null) {
+                                        addListAutoGen(
+                                            userPcGen.ramSpecification!
+                                                .toJson(),
+                                            quantity: 1);
+                                      }
+                                      if (userPcGen.storageSpecification !=
+                                          null) {
+                                        addListAutoGen(
+                                            userPcGen.storageSpecification!
+                                                .toJson(),
+                                            quantity: 1);
+                                      }
+                                      if (userPcGen.caseCoolerSpecification !=
+                                          null) {
+                                        addListAutoGen(userPcGen
+                                            .caseCoolerSpecification!
+                                            .toJson());
+                                      }
+                                      if (userPcGen.monitorSpecification !=
+                                          null) {
+                                        addListAutoGen(userPcGen
+                                            .monitorSpecification!
+                                            .toJson());
+                                      }
 
-                                    if (userPcGen.cpuCoolerSpecification !=
-                                        null) {
-                                      addListAutoGen(userPcGen
-                                          .cpuCoolerSpecification!
-                                          .toJson());
-                                    }
-                                    if (userPcGen.psuSpecification != null) {
-                                      addListAutoGen(
-                                          userPcGen.psuSpecification!.toJson());
-                                    }
-                                    updatePrice();
-                                    updateTotalPower().then((value) {
+                                      if (userPcGen.cpuCoolerSpecification !=
+                                          null) {
+                                        addListAutoGen(userPcGen
+                                            .cpuCoolerSpecification!
+                                            .toJson());
+                                      }
+                                      if (userPcGen.psuSpecification != null) {
+                                        addListAutoGen(userPcGen
+                                            .psuSpecification!
+                                            .toJson());
+                                      }
+                                      updatePrice();
+                                      updateTotalPower().then((value) {
+                                        if (mounted) {
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        }
+                                      });
+                                    } else {
                                       if (mounted) {
                                         setState(() {
                                           isLoading = false;
                                         });
                                       }
-                                    });
+                                      _showDialogNoBuild();
+                                    }
                                   });
                                 },
                                 child: Container(
@@ -913,7 +1090,7 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          "Consumed Watt:",
+                          "Consumed Power:",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
@@ -938,7 +1115,7 @@ class _BuildPCScreenState extends State<BuildPCScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          "Current PSU's Watt:",
+                          "Current PSU's Power:",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,

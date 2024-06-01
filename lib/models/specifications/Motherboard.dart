@@ -8,6 +8,7 @@ class Motherboard {
   String? sata;
   String? m2;
   String? powerConnectors;
+  int? power;
   String? wifi;
   String? formFactor;
   String? gpuInterface;
@@ -25,6 +26,7 @@ class Motherboard {
     this.sata,
     this.m2,
     this.powerConnectors,
+    this.power,
     this.wifi,
     this.formFactor,
     this.gpuInterface,
@@ -43,6 +45,7 @@ class Motherboard {
         sata: json["sata"],
         m2: json["m2"],
         powerConnectors: json["power_connectors"],
+        power: json["power"],
         wifi: json["wifi"],
         formFactor: json["form_factor"],
         gpuInterface: json["gpu_interface"],
@@ -61,6 +64,7 @@ class Motherboard {
         "sata": sata,
         "m2": m2,
         "power_connectors": powerConnectors,
+        "power": power,
         "wifi": wifi,
         "form_factor": formFactor,
         "gpu_interface": gpuInterface,
@@ -77,6 +81,7 @@ class Motherboard {
         "SATA": sata,
         "M2": m2,
         "Power Connectors": powerConnectors,
+        "Power": "${power} W",
         "Wifi": wifi,
         "Form Factor": formFactor,
         "GPU Interface": gpuInterface,

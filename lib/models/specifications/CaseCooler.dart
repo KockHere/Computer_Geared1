@@ -41,9 +41,9 @@ class CaseCooler {
         //"specification_id": specificationId,
         //"product_id": productId,
         "Model": model,
-        "Airflow": airflow,
-        "Fan RPM": fanRpm,
-        "Size": size,
-        "Voltage": voltage,
+        "Airflow": "${airflow} cfm",
+        "Fan RPM": "${fanRpm} rpm",
+        "Size": "${size} mm",
+        "Voltage": "${voltage} W",
       };
 }

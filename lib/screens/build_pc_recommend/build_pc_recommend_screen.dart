@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/controllers/CategoryAPI.dart';
 import 'package:shop_app/controllers/PCBuilderAPI.dart';
@@ -9,9 +8,15 @@ import 'package:shop_app/controllers/PCComponentAPI.dart';
 import 'package:shop_app/models/CartItem.dart';
 import 'package:shop_app/models/Category.dart';
 import 'package:shop_app/models/Product.dart';
+import 'package:shop_app/models/specifications/CaseCooler.dart';
+import 'package:shop_app/models/specifications/CpuCooler.dart';
 import 'package:shop_app/models/specifications/Gpu.dart';
+import 'package:shop_app/models/specifications/Monitor.dart';
+import 'package:shop_app/models/specifications/Motherboard.dart';
 import 'package:shop_app/models/specifications/Processor.dart';
 import 'package:shop_app/models/specifications/Psu.dart';
+import 'package:shop_app/models/specifications/Ram.dart';
+import 'package:shop_app/models/specifications/Storage.dart';
 import 'package:shop_app/models/specifications/UserPC.dart';
 import 'package:shop_app/screens/build_pc_recommend/components/build_pc_cart.dart';
 import 'package:shop_app/screens/choose_device/choose_device_screen.dart';
@@ -43,7 +48,12 @@ class _BuildPCRecommendScreenState extends State<BuildPCRecommendScreen> {
   int totalPower = 0;
 
   Psu psu = Psu(productId: "", power: 0);
-
+  CaseCooler caseCooler = CaseCooler(productId: "", voltage: 0);
+  Motherboard motherboard = Motherboard(productId: "", power: 0);
+  CpuCooler cpuCooler = CpuCooler(productId: "", voltage: 0);
+  Monitor monitor = Monitor(productId: "", voltage: 0);
+  //Ram ram = Ram(productId: "", voltage: 0);
+  Storage storage = Storage(productId: "", voltage: 0);
   Gpu gpu = Gpu(productId: "", maxPowerConsumption: 0);
   Processor processor = Processor(productId: "", power: 0);
 
@@ -116,6 +126,12 @@ class _BuildPCRecommendScreenState extends State<BuildPCRecommendScreen> {
     bool isGpu = true;
     bool isProccessor = true;
     bool isPsu = true;
+    bool isCaseCooler = true;
+    bool isMotherboard = true;
+    bool isCpuCooler = true;
+    bool isMonitor = true;
+    bool isRam = true;
+    bool isStorage = true;
     for (Product p in listSelectedProduct) {
       if (p.categoryName!.toLowerCase() == "gpu") {
         isGpu = false;
@@ -125,6 +141,61 @@ class _BuildPCRecommendScreenState extends State<BuildPCRecommendScreen> {
           gpu = Gpu.fromJson(data);
         }
       }
+
+      if (p.categoryName!.toLowerCase() == "fan") {
+        isCaseCooler = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          caseCooler = CaseCooler.fromJson(data);
+        }
+      }
+
+      if (p.categoryName!.toLowerCase() == "motherboard") {
+        isMotherboard = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          motherboard = Motherboard.fromJson(data);
+        }
+      }
+
+      if (p.categoryName!.toLowerCase() == "cooler cpu") {
+        isCpuCooler = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          cpuCooler = CpuCooler.fromJson(data);
+        }
+      }
+
+      if (p.categoryName!.toLowerCase() == "monitor") {
+        isMonitor = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          monitor = Monitor.fromJson(data);
+        }
+      }
+
+      // if (p.categoryName!.toLowerCase() == "ram") {
+      //   isRam = false;
+      //   Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+      //       p.categoryName ?? "", p.productId ?? "");
+      //   if (data.isNotEmpty) {
+      //     ram = Ram.fromJson(data);
+      //   }
+      // }
+
+      if (p.categoryName!.toLowerCase() == "storage") {
+        isStorage = false;
+        Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
+            p.categoryName ?? "", p.productId ?? "");
+        if (data.isNotEmpty) {
+          storage = Storage.fromJson(data);
+        }
+      }
+
       if (p.categoryName!.toLowerCase() == "processor") {
         isProccessor = false;
         Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
@@ -133,6 +204,7 @@ class _BuildPCRecommendScreenState extends State<BuildPCRecommendScreen> {
           processor = Processor.fromJson(data);
         }
       }
+
       if (p.categoryName!.toLowerCase() == "psu") {
         isPsu = false;
         Map<String, dynamic> data = await PCComponentAPI.getProductComponent(
@@ -144,6 +216,24 @@ class _BuildPCRecommendScreenState extends State<BuildPCRecommendScreen> {
     }
     if (isGpu) {
       gpu = Gpu(productId: "", maxPowerConsumption: 0);
+    }
+    if (isCaseCooler) {
+      caseCooler = CaseCooler(productId: "", voltage: 0);
+    }
+    if (isMotherboard) {
+      motherboard = Motherboard(productId: "", power: 0);
+    }
+    if (isCpuCooler) {
+      cpuCooler = CpuCooler(productId: "", voltage: 0);
+    }
+    if (isMonitor) {
+      monitor = Monitor(productId: "", voltage: 0);
+    }
+    // if (isRam) {
+    //   ram = Ram(productId: "", voltage: 0);
+    // }
+    if (isStorage) {
+      storage = Storage(productId: "", voltage: 0);
     }
     if (isProccessor) {
       processor = Processor(productId: "", power: 0);

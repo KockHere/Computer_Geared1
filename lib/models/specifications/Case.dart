@@ -47,8 +47,8 @@ class Case {
         "Side Panel Type": sidePanelType,
         "Internal Drive Size": internalDriveSize,
         "Front Panel": frontPanel,
-        "CPU Cooler Support Size": cpuCoolerSupportSize,
-        "Case Cooler Support Size": caseCoolerSupportSize,
+        "CPU Cooler Support Size": "${cpuCoolerSupportSize} mm",
+        "Case Cooler Support Size": "${caseCoolerSupportSize} mm",
       };
   Map<String, dynamic> toJson2() =>
       {"caseId": productId == "" ? null : productId};
